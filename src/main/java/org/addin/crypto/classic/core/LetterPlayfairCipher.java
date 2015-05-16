@@ -45,6 +45,8 @@ public class LetterPlayfairCipher extends PlayfairCipher{
     public void setKey(String key) {
         if(key.length()<elementDomain-1){
             throw new InappropriateKeyException("key too small.");
+        }else if(key.length() > elementDomain){
+            throw new InappropriateKeyException("key too big.");
         }
         int m = (int) Math.sqrt(this.elementDomain);
         int[][] keys = new int[m][m];
