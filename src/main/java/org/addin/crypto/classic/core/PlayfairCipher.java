@@ -27,14 +27,6 @@ public class PlayfairCipher implements Encipherment<int[]> {
 
         int[] plainEven = insertBogusBetweenTwin(plainText);
 
-        System.out.println("");
-        for (int i = 0; i < plainEven.length; i++) {
-            int j = plainEven[i];
-            System.out.print(CharIntMapper.getCharRepresentative(j, true));
-
-        }
-        System.out.println("");
-
         int[] cipherText = new int[plainEven.length];
 
         for (int idx = 1; idx < plainEven.length; idx += 2) {
