@@ -2,7 +2,7 @@ package org.addin.crypto.classic.core;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import org.addin.crypto.classic.core.exception.InapropriateKeyException;
+import org.addin.crypto.classic.core.exception.InappropriateKeyException;
 
 /**
  *
@@ -114,7 +114,7 @@ public class PlayfairCipher implements Encipherment<int[]> {
         if (hasNoDuplicateElement(keyA) && isSquareMatrix(keyA, this.elementDomain)) {
             this.key = keyA;
         }else{
-            throw new InapropriateKeyException("Key cannot contain duplicate value and must be "
+            throw new InappropriateKeyException("Key cannot contain duplicate value and must be "
                     +Math.sqrt(elementDomain)+" square matrix.");
         }
     }
@@ -190,7 +190,7 @@ public class PlayfairCipher implements Encipherment<int[]> {
     private void isKeySet() {
         if (key == null
                 || key.length == 0) {
-            throw new InapropriateKeyException("Set the key first.");
+            throw new InappropriateKeyException("Set the key first.");
         }
     }
 
