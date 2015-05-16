@@ -65,10 +65,12 @@ public class VigenereCipher implements Encipherment<int[]> {
     @Override
     public void setKey(SimpleKey key) {
         this.key = key;
+        isKeySet();
     }
 
     private void isKeySet() {
         if (key == null
+                || key.getKey() == null
                 || key.getKey().length == 0) {
             throw new InapropriateKeyException("Set the key first.");
         }
