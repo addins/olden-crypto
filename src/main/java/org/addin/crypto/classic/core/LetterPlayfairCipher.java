@@ -1,5 +1,7 @@
 package org.addin.crypto.classic.core;
 
+import org.addin.crypto.classic.core.exception.InappropriateKeyException;
+
 /**
  *
  * @author addin <addins3009@gmail.com>
@@ -42,7 +44,7 @@ public class LetterPlayfairCipher extends PlayfairCipher{
 
     public void setKey(String key) {
         if(key.length()<elementDomain-1){
-            throw new RuntimeException("key too small.");
+            throw new InappropriateKeyException("key too small.");
         }
         int m = (int) Math.sqrt(this.elementDomain);
         int[][] keys = new int[m][m];
