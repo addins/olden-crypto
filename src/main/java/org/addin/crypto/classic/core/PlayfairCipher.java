@@ -3,6 +3,7 @@ package org.addin.crypto.classic.core;
 import java.util.ArrayList;
 import java.util.HashSet;
 import org.addin.crypto.classic.core.exception.InappropriateKeyException;
+import org.addin.crypto.classic.core.exception.InvalidBogusDomainException;
 
 /**
  *
@@ -11,7 +12,7 @@ import org.addin.crypto.classic.core.exception.InappropriateKeyException;
 public class PlayfairCipher implements Encipherment<int[]> {
 
     private int[][] key;
-    private int bogusDomain;
+    private int bogusDomain = -1;
 
     protected final int elementDomain;
 
@@ -22,6 +23,7 @@ public class PlayfairCipher implements Encipherment<int[]> {
     @Override
     public int[] encrypt(int[] plainText) {
         isKeySet();
+        isBogusDomainSet();
 
         int[] plainEven = insertBogusBetweenTwin(plainText);
 
@@ -61,6 +63,7 @@ public class PlayfairCipher implements Encipherment<int[]> {
     @Override
     public int[] decrypt(int[] cipherText) {
         isKeySet();
+        isBogusDomainSet();
         int[] plainText = new int[cipherText.length];
 
         for (int idx = 1; idx < cipherText.length; idx += 2) {
@@ -124,6 +127,7 @@ public class PlayfairCipher implements Encipherment<int[]> {
     }
 
     public int getBogusDomain() {
+        isBogusDomainSet();
         return bogusDomain;
     }
 
@@ -192,6 +196,11 @@ public class PlayfairCipher implements Encipherment<int[]> {
                 || key.length == 0) {
             throw new InappropriateKeyException("Set the key first.");
         }
+    }
+    
+    private void isBogusDomainSet() {
+        if(bogusDomain == -1)
+            throw new InvalidBogusDomainException("Bogus domain value need to be set");
     }
 
     private int[] findPositionInKey(int element) {
