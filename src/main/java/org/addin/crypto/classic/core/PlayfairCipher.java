@@ -114,8 +114,8 @@ public class PlayfairCipher implements Encipherment<int[]> {
         if (hasNoDuplicateElement(keyA) && isSquareMatrix(keyA, this.elementDomain)) {
             this.key = keyA;
         }else{
-            throw new InappropriateKeyException("Key cannot contain duplicate value and must be "
-                    +Math.sqrt(elementDomain)+" square matrix.");
+            throw new InappropriateKeyException("Key cannot contains duplicate value and must be "
+                    +(int)Math.sqrt(elementDomain)+" square matrix.");
         }
     }
 
