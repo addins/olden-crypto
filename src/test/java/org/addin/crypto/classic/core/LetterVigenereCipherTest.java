@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.addin.crypto.classic.core.exception.InappropriateKeyException;
 
 /**
  *
@@ -64,14 +65,25 @@ public class LetterVigenereCipherTest {
     }
 
     /**
-     * Test of setKey method, of class LetterVigenereCipher.
+     * Test of setKey method with invalid key, SimpleKey without int array set, 
+     * of class LetterVigenereCipher.
      */
-    @Test
-    public void testSetKey() {
-        System.out.println("setKey");
+    @Test(expected = InappropriateKeyException.class)
+    public void testSetKeyWithEmptyString() {
+        System.out.println("setKey with empty string");
         String key = "";
         LetterVigenereCipher instance = new LetterVigenereCipher();
         instance.setKey(key);
     }
     
+    /**
+     * Test of setKey method, of class LetterVigenereCipher.
+     */
+    @Test
+    public void testSetKeyWithAnyString() {
+        System.out.println("setKey with any string");
+        String key = "abcd";
+        LetterVigenereCipher instance = new LetterVigenereCipher();
+        instance.setKey(key);
+    }    
 }
