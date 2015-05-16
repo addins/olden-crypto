@@ -1,5 +1,7 @@
 package org.addin.crypto.classic.core;
 
+import org.addin.crypto.classic.core.exception.InapropriateKeyException;
+
 /**
  *
  * @author addin <addins3009@gmail.com>
@@ -68,7 +70,7 @@ public class VigenereCipher implements Encipherment<int[]> {
     private void isKeySet() {
         if (key == null
                 || key.getKey().length == 0) {
-            throw new RuntimeException("Set the key first.");
+            throw new InapropriateKeyException("Set the key first.");
         }
     }
 
