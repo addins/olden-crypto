@@ -1,6 +1,8 @@
 package org.addin.crypto.classic.core;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import org.addin.crypto.classic.core.exception.InapropriateKeyException;
 
 /**
  *
@@ -10,27 +12,27 @@ public class PlayfairCipher implements Encipherment<int[]> {
 
     private int[][] key;
     private int bogusDomain;
-    
+
     protected final int elementDomain;
 
     public PlayfairCipher(int elementDomain) {
         this.elementDomain = elementDomain;
-    }    
+    }
 
     @Override
     public int[] encrypt(int[] plainText) {
         isKeySet();
 
         int[] plainEven = insertBogusBetweenTwin(plainText);
-        
+
         System.out.println("");
         for (int i = 0; i < plainEven.length; i++) {
             int j = plainEven[i];
             System.out.print(CharIntMapper.getCharRepresentative(j, true));
-            
+
         }
         System.out.println("");
-        
+
         int[] cipherText = new int[plainEven.length];
 
         for (int idx = 1; idx < plainEven.length; idx += 2) {
@@ -68,16 +70,16 @@ public class PlayfairCipher implements Encipherment<int[]> {
             // position as x,y in key
             int[] pos1 = findPositionInKey(el1);
             int[] pos2 = findPositionInKey(el2);
-            
+
             int diff = 0;
-            
+
             if (pos1[0] == pos2[0]) {
                 diff = pos1[1] - 1;
                 if (diff < 0) {
                     diff = diff + key[pos1[0]].length;
                 }
                 plainText[idx - 1] = getElementInKey(pos1[0], (diff) % key[pos1[0]].length);
-                
+
                 diff = pos2[1] - 1;
                 if (diff < 0) {
                     diff = diff + key[pos2[0]].length;
@@ -89,7 +91,7 @@ public class PlayfairCipher implements Encipherment<int[]> {
                     diff = diff + key.length;
                 }
                 plainText[idx - 1] = getElementInKey((diff) % key.length, pos1[1]);
-                
+
                 diff = pos2[0] - 1;
                 if (diff < 0) {
                     diff = diff + key.length;
@@ -102,13 +104,19 @@ public class PlayfairCipher implements Encipherment<int[]> {
         }
         // removing bogus
         plainText = removeBogus(plainText);
-        
+
         return plainText;
     }
 
     @Override
-    public void setKey(SimpleKey key) {
-        this.key = (int[][]) key.getKey();
+    public void setKey(SimpleKey key) throws RuntimeException {
+        int[][] keyA = (int[][]) key.getKey();
+        if (hasNoDuplicateElement(keyA) && isSquareMatrix(keyA, this.elementDomain)) {
+            this.key = keyA;
+        }else{
+            throw new InapropriateKeyException("Key cannot contain duplicate value and must be "
+                    +Math.sqrt(elementDomain)+" square matrix.");
+        }
     }
 
     public void setBogusDomain(int bogusDomain) {
@@ -125,7 +133,7 @@ public class PlayfairCipher implements Encipherment<int[]> {
 
         outp.add(0, input[0]);
         // start to inserting bogus element.
-        for (int idx = 1; idx < input.length;idx++) {
+        for (int idx = 1; idx < input.length; idx++) {
             if (input[idx] == input[idx - 1]) {
                 outp.add(bogusDomain);
                 outp.add(input[idx]);
@@ -154,7 +162,7 @@ public class PlayfairCipher implements Encipherment<int[]> {
 
         outp.add(0, input[0]);
         // start to removing bogus element.
-        for (int idx = 1; idx < input.length;idx++) {
+        for (int idx = 1; idx < input.length; idx++) {
             if (input[idx] == bogusDomain) {
                 if (idx + 1 < input.length && input[idx - 1] == input[idx + 1]) {
                     outp.add(input[idx + 1]);
@@ -166,8 +174,8 @@ public class PlayfairCipher implements Encipherment<int[]> {
         }
 
         // if the last element is bogusDomain, remove it.
-        if (outp.get(outp.size()-1)==bogusDomain) {
-            outp.remove(outp.size()-1);
+        if (outp.get(outp.size() - 1) == bogusDomain) {
+            outp.remove(outp.size() - 1);
         }
 
         // convert it to primitive int array.
@@ -182,7 +190,7 @@ public class PlayfairCipher implements Encipherment<int[]> {
     private void isKeySet() {
         if (key == null
                 || key.length == 0) {
-            throw new RuntimeException("Set the key first.");
+            throw new InapropriateKeyException("Set the key first.");
         }
     }
 
@@ -203,4 +211,28 @@ public class PlayfairCipher implements Encipherment<int[]> {
         return key[x][y];
     }
 
+    private static boolean hasNoDuplicateElement(int[][] keyA) {
+        HashSet<Integer> set = new HashSet<>();
+        for(int[] r : keyA){
+            for(int c : r){
+                if(!set.add(c))
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isSquareMatrix(int[][] keyA, int elementDomain) {
+        int ordo = (int) Math.sqrt(elementDomain);
+
+        int c = 0;
+        for (int[] r : keyA) {
+            if (r.length != ordo) {
+                return false;
+            }
+            c++;
+        }
+        
+        return c == ordo;
+    }
 }
