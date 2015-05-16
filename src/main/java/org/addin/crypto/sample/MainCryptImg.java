@@ -56,7 +56,6 @@ public class MainCryptImg {
         String plain1 = plain;//"hello";
         playfairCipher.setKey("lgdbaqmhecurnifxvsokzywtp");
         String ciph1 = playfairCipher.encrypt(plain1);
-        printMatrix(playfairCipher.getKey());
         System.out.println("ciph1 = " + ciph1);
         System.out.println("-- = " + playfairCipher.decrypt(ciph1));
     }

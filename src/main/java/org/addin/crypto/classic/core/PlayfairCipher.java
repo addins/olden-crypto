@@ -15,13 +15,7 @@ public class PlayfairCipher implements Encipherment<int[]> {
 
     public PlayfairCipher(int elementDomain) {
         this.elementDomain = elementDomain;
-    }
-
-    public int[][] getKey() {
-        return key;
-    }
-    
-    
+    }    
 
     @Override
     public int[] encrypt(int[] plainText) {
