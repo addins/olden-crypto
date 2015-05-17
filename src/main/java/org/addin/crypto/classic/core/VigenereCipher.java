@@ -8,8 +8,8 @@ import org.addin.crypto.classic.core.exception.InappropriateKeyException;
  */
 public class VigenereCipher implements Encipherment<int[]> {
 
-    private SimpleKey<int[]> key;
-    private final int elementDomain;
+    protected SimpleKey<int[]> key;
+    protected final int elementDomain;
 
     public VigenereCipher(int elementDomain) {
         this.elementDomain = elementDomain;
@@ -29,7 +29,7 @@ public class VigenereCipher implements Encipherment<int[]> {
         int diff = 0;
         for (int i = 0; i < plainText.length; i++) {
             diff = 0;
-            diff = plainText[i] + key.getKey()[i % key.getKey().length];
+            diff = plainText[i] + getKeyElementAt(i);
             if (diff > elementDomain) {
                 diff = diff - elementDomain;
             }
@@ -53,7 +53,7 @@ public class VigenereCipher implements Encipherment<int[]> {
         int diff = 0;
         for (int i = 0; i < cipherText.length; i++) {
             diff = 0;
-            diff = cipherText[i] - key.getKey()[i % key.getKey().length];
+            diff = cipherText[i] - getKeyElementAt(i);
             if (diff < 0) {
                 diff = elementDomain + diff;
             }
@@ -66,6 +66,10 @@ public class VigenereCipher implements Encipherment<int[]> {
     public void setKey(SimpleKey key) {
         this.key = key;
         isKeySet();
+    }
+    
+    protected int getKeyElementAt(int i){
+        return key.getKey()[i % key.getKey().length];
     }
 
     private void isKeySet() {
