@@ -1,17 +1,12 @@
 package org.addin.crypto.sample;
 
-import org.addin.crypto.classic.image.MultiSpectralVigenereCipher;
-import boofcv.core.image.ConvertBufferedImage;
 import boofcv.io.image.UtilImageIO;
-import boofcv.struct.image.ImageUInt8;
-import boofcv.struct.image.MultiSpectral;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import org.addin.crypto.classic.core.CharIntMapper;
 import org.addin.crypto.classic.core.LetterPlayfairCipher;
 import org.addin.crypto.classic.core.LetterVigenereCipher;
-import org.addin.crypto.classic.core.PlayfairCipher;
 import org.addin.crypto.classic.core.SimpleKey;
+import org.addin.crypto.classic.core.util.CharIntMapper;
 import org.addin.crypto.classic.image.TwoDimensionsVigenereCipher;
 
 /**

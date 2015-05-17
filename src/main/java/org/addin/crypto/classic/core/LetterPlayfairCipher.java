@@ -1,6 +1,7 @@
 package org.addin.crypto.classic.core;
 
 import org.addin.crypto.classic.core.exception.InappropriateKeyException;
+import org.addin.crypto.classic.core.util.CharIntMapper;
 
 /**
  *

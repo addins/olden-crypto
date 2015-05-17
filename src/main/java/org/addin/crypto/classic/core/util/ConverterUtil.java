@@ -1,4 +1,4 @@
-package org.addin.crypto.classic.core;
+package org.addin.crypto.classic.core.util;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;

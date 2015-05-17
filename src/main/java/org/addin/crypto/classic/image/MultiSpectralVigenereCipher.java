@@ -2,10 +2,10 @@ package org.addin.crypto.classic.image;
 
 import boofcv.struct.image.ImageUInt8;
 import boofcv.struct.image.MultiSpectral;
-import org.addin.crypto.classic.core.ConverterUtil;
 import org.addin.crypto.classic.core.Encipherment;
 import org.addin.crypto.classic.core.SimpleKey;
 import org.addin.crypto.classic.core.VigenereCipher;
+import org.addin.crypto.classic.core.util.ConverterUtil;
 
 /**
  *

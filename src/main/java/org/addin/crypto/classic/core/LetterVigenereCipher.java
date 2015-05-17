@@ -1,5 +1,7 @@
 package org.addin.crypto.classic.core;
 
+import org.addin.crypto.classic.core.util.CharIntMapper;
+
 /**
  *
  * @author addin <addins3009@gmail.com>
