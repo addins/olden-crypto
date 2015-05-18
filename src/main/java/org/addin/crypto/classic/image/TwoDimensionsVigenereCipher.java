@@ -1,6 +1,7 @@
 package org.addin.crypto.classic.image;
 
 import org.addin.crypto.classic.core.Encipherment;
+import org.addin.crypto.classic.core.KeyStreamVigenereCipher;
 import org.addin.crypto.classic.core.SimpleKey;
 import org.addin.crypto.classic.core.VigenereCipher;
 
@@ -13,7 +14,7 @@ public class TwoDimensionsVigenereCipher implements Encipherment<int[][]>{
     private VigenereCipher cipher;
 
     public TwoDimensionsVigenereCipher() {
-        cipher = new VigenereCipher(256);
+        cipher = new KeyStreamVigenereCipher(256);
     }
     
     @Override
