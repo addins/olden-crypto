@@ -104,13 +104,18 @@ public class PlayfairCipher implements Encipherment<int[]> {
     }
 
     @Override
-    public void setKey(SimpleKey key) throws RuntimeException {
-        int[][] keyA = (int[][]) key.getKey();
+    public void setKey(SimpleKey key) throws InappropriateKeyException,ClassCastException {
+        int[][] keyA = null;
+        try {
+            keyA = (int[][]) key.getKey();
+        } catch (ClassCastException e) {
+            throw new ClassCastException("the key need to be 2 dimensions array.");
+        }
         if (hasNoDuplicateElement(keyA) && isSquareMatrix(keyA, this.elementDomain)) {
             this.key = keyA;
-        }else{
+        } else {
             throw new InappropriateKeyException("Key cannot contains duplicate value and must be "
-                    +(int)Math.sqrt(elementDomain)+" square matrix.");
+                    + (int) Math.sqrt(elementDomain) + " square matrix.");
         }
     }
 
@@ -189,10 +194,11 @@ public class PlayfairCipher implements Encipherment<int[]> {
             throw new InappropriateKeyException("Set the key first.");
         }
     }
-    
+
     private void isBogusDomainSet() {
-        if(bogusDomain == -1)
+        if (bogusDomain == -1) {
             throw new InvalidBogusDomainException("Bogus domain value need to be set");
+        }
     }
 
     private int[] findPositionInKey(int element) {
@@ -214,10 +220,11 @@ public class PlayfairCipher implements Encipherment<int[]> {
 
     private static boolean hasNoDuplicateElement(int[][] keyA) {
         HashSet<Integer> set = new HashSet<>();
-        for(int[] r : keyA){
-            for(int c : r){
-                if(!set.add(c))
+        for (int[] r : keyA) {
+            for (int c : r) {
+                if (!set.add(c)) {
                     return false;
+                }
             }
         }
         return true;
@@ -233,7 +240,7 @@ public class PlayfairCipher implements Encipherment<int[]> {
             }
             c++;
         }
-        
+
         return c == ordo;
     }
 }
