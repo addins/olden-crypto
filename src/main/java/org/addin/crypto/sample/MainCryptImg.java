@@ -17,28 +17,11 @@ public class MainCryptImg {
 
     public static void main(String[] args) throws IOException {
         System.out.println("Hello");
-        /*
-//        BufferedImage input = UtilImageIO.loadImage("test2.jpg");
-        BufferedImage input = UtilImageIO.loadImage("test2_en.ppm");
-//        UtilImageIO.loadPPM_U8(null, null, null)
-
-        MultiSpectral<ImageUInt8> img;
-        img = ConvertBufferedImage.convertFromMulti(input, null, true, ImageUInt8.class);
-
-        MultiSpectralVigenereCipher msvc = new MultiSpectralVigenereCipher();
-        SimpleKey<int[]> key1 = new SimpleKey();
-//        key1.setKey(new int[]{219,119,23,145,89,34,123,65,45,78,254,132});
-        key1.setKey(new int[]{0});
-        msvc.setKey(key1);
-        img = msvc.encrypt(img);
-        img = msvc.decrypt(img);
-
-        
-        UtilImageIO.savePPM(img, "test2_de.ppm", null);
-//        UtilImageIO.savePPM(img, "test2_en.ppm",null);*/
-//        testImageVigenereEncrypt();
-//        testImageVigenereDecrypt();
-        
+        testImageVigenereEncrypt();
+        testImageVigenereDecrypt();
+    }
+    
+    public static void testLetterVigenereCipher(){
         LetterVigenereCipher cipher = new LetterVigenereCipher();
         cipher.setKey("drain");
         String plain = "MyNameisRobertEinsteinImnolongerMrZX";
@@ -46,9 +29,11 @@ public class MainCryptImg {
         String ciph = cipher.encrypt(plain);
         System.out.println("ciph = " + ciph);
         System.out.println("-- "+cipher.decrypt(ciph));
-        
+    }
+    
+    public static void testLetterPlayfairCipher(){
         LetterPlayfairCipher playfairCipher = new LetterPlayfairCipher();
-        String plain1 = plain;//"hello";
+        String plain1 = "hello";
         playfairCipher.setKey("lgdbaqmhecurnifxvsokzywtp");
         String ciph1 = playfairCipher.encrypt(plain1);
         System.out.println("ciph1 = " + ciph1);
@@ -76,7 +61,8 @@ public class MainCryptImg {
     }
 
     public static void testImageVigenereEncrypt() {
-        BufferedImage image = UtilImageIO.loadImage("test2.jpg");
+        String fn = "tes";
+        BufferedImage image = UtilImageIO.loadImage(fn+".png");
         int[][] marchThroughImage = marchThroughImage(image);
         TwoDimensionsVigenereCipher cipher = new TwoDimensionsVigenereCipher();
         SimpleKey<int[]> key;
@@ -85,11 +71,12 @@ public class MainCryptImg {
 //        key.setKey(new int[]{0});
         cipher.setKey(key);
         int[][] encrypt = cipher.encrypt(marchThroughImage);
-        saveImage("test2_en.jpg", encrypt, image.getWidth(), image.getHeight());
+        saveImage(fn+"_en.png", encrypt, image.getWidth(), image.getHeight());
     }
     
     public static void testImageVigenereDecrypt() {
-        BufferedImage image = UtilImageIO.loadImage("test2_en.jpg");
+        String fn = "tes";
+        BufferedImage image = UtilImageIO.loadImage(fn+"_en.png");
         int[][] marchThroughImage = marchThroughImage(image);
         TwoDimensionsVigenereCipher cipher = new TwoDimensionsVigenereCipher();
         SimpleKey<int[]> key;
@@ -98,7 +85,7 @@ public class MainCryptImg {
 //        key.setKey(new int[]{0});
         cipher.setKey(key);
         int[][] decrypt = cipher.decrypt(marchThroughImage);
-        saveImage("test2_de.jpg", decrypt, image.getWidth(), image.getHeight());
+        saveImage(fn+"_de.png", decrypt, image.getWidth(), image.getHeight());
     }
     
     public static void saveImage(String filename, int[][] data, int width, int height){
