@@ -1,5 +1,7 @@
 package org.addin.crypto.classic.image;
 
+import ar.com.hjg.pngj.ImageInfo;
+import ar.com.hjg.pngj.ImageLineHelper;
 import ar.com.hjg.pngj.ImageLineInt;
 import org.addin.crypto.classic.core.Encipherment;
 import org.addin.crypto.classic.core.KeyStreamVigenereCipher;
@@ -7,27 +9,103 @@ import org.addin.crypto.classic.core.SimpleKey;
 import org.addin.crypto.classic.core.VigenereCipher;
 
 /**
- *
+ * This class is only for encrypting/decrypting image data that has RGB/RGBA 
+ * channels and only 8 bit depth each. ImageLineInt contains RGB/A data only 
+ * for a row of an image.
+ * 
  * @author addin <addins3009@gmail.com>
  */
 public class ImageLineIntSuperEncryption implements Encipherment<ImageLineInt> {
 
     private SpecialPlayfairCipher playfairCipher;
     private VigenereCipher vigenereCipher;
+    
+    //image related data
+    private ImageInfo imageInfo;
 
-    public ImageLineIntSuperEncryption() {
+    public ImageLineIntSuperEncryption(ImageInfo imageInfo) {
         playfairCipher = new SpecialPlayfairCipher(256);
         vigenereCipher = new KeyStreamVigenereCipher(256);
+        this.imageInfo = imageInfo;
     }
     
     @Override
     public ImageLineInt encrypt(ImageLineInt plainText) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        int[] scanline = plainText.getScanline();
+        int channels = imageInfo.channels;
+        int[] redPlain = new int[imageInfo.cols];
+        int[] greenPlain = new int[imageInfo.cols];
+        int[] bluePlain = new int[imageInfo.cols];
+        
+        int[] red1stCiph = null;
+        int[] green1stCiph = null;
+        int[] blue1stCiph = null;
+        
+        int[] red2ndCiph = null;
+        int[] green2ndCiph = null;
+        int[] blue2ndCiph = null;
+        
+        for (int j = 0; j < imageInfo.cols ; j++) {
+            redPlain[j] = scanline[j*channels];
+            greenPlain[j] = scanline[j*channels+1];
+            bluePlain[j] = scanline[j*channels+2];
+        }
+        
+        red1stCiph = vigenereCipher.encrypt(redPlain);
+        green1stCiph = vigenereCipher.encrypt(greenPlain);
+        blue1stCiph = vigenereCipher.encrypt(bluePlain);
+        
+        red2ndCiph = playfairCipher.encrypt(red1stCiph);
+        green2ndCiph = playfairCipher.encrypt(green1stCiph);
+        blue2ndCiph = playfairCipher.encrypt(blue1stCiph);
+        
+        for (int j = 0; j < imageInfo.cols ; j++) {
+            scanline[j*channels] = red2ndCiph[j];
+            scanline[j*channels+1] = green2ndCiph[j];
+            scanline[j*channels+2] = blue2ndCiph[j];
+        }
+        
+        return plainText;
     }
 
     @Override
     public ImageLineInt decrypt(ImageLineInt cipherText) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        int[] scanline = cipherText.getScanline();
+        int channels = imageInfo.channels;
+        int[] redCiph = new int[imageInfo.cols];
+        int[] greenCiph = new int[imageInfo.cols];
+        int[] blueCiph = new int[imageInfo.cols];
+        
+        int[] red1stPlain = null;
+        int[] green1stPlain = null;
+        int[] blue1stPlain = null;
+        
+        int[] red2ndPlain = null;
+        int[] green2ndPlain = null;
+        int[] blue2ndPlain = null;
+        
+        for (int j = 0; j < imageInfo.cols ; j++) {
+            redCiph[j] = scanline[j*channels];
+            greenCiph[j] = scanline[j*channels+1];
+            blueCiph[j] = scanline[j*channels+2];
+        }
+        
+        red1stPlain = playfairCipher.decrypt(redCiph);
+        green1stPlain = playfairCipher.decrypt(greenCiph);
+        blue1stPlain = playfairCipher.decrypt(blueCiph);
+        
+        red2ndPlain = vigenereCipher.decrypt(red1stPlain);
+        green2ndPlain = vigenereCipher.decrypt(green1stPlain);
+        blue2ndPlain = vigenereCipher.decrypt(blue1stPlain);
+        
+        
+        for (int j = 0; j < imageInfo.cols ; j++) {
+            scanline[j*channels] = red2ndPlain[j];
+            scanline[j*channels+1] = green2ndPlain[j];
+            scanline[j*channels+2] = blue2ndPlain[j];
+        }
+        
+        return cipherText;
     }
 
     @Override
