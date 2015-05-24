@@ -6,8 +6,6 @@ import java.io.IOException;
 import org.addin.crypto.classic.core.LetterPlayfairCipher;
 import org.addin.crypto.classic.core.LetterVigenereCipher;
 import org.addin.crypto.classic.core.SimpleKey;
-import org.addin.crypto.classic.core.util.CharIntMapper;
-import org.addin.crypto.classic.image.TwoDimensionsVigenereCipher;
 
 /**
  *
@@ -17,8 +15,8 @@ public class MainCryptImg {
 
     public static void main(String[] args) throws IOException {
         System.out.println("Hello");
-        testImageVigenereEncrypt();
-        testImageVigenereDecrypt();
+//        testImageVigenereEncrypt();
+//        testImageVigenereDecrypt();
     }
     
     public static void testLetterVigenereCipher(){
@@ -54,46 +52,47 @@ public class MainCryptImg {
     public static void printMatrix(int[][] matrix) {
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
-                System.out.print(CharIntMapper.getCharRepresentative(matrix[i][j],true) + "\t");
+                System.out.print(/*CharIntMapper.getCharRepresentative(*/matrix[i][j]/*,true)*/ + "\t");
             }
             System.out.println();
         }
     }
 
-    public static void testImageVigenereEncrypt() {
-        String fn = "tes";
-        BufferedImage image = UtilImageIO.loadImage(fn+".png");
-        int[][] marchThroughImage = marchThroughImage(image);
-        TwoDimensionsVigenereCipher cipher = new TwoDimensionsVigenereCipher();
-        SimpleKey<int[]> key;
-        key = new SimpleKey();
-        key.setKey(new int[]{219,119,23,145,89,34,123,65,45,78,254,132});
-//        key.setKey(new int[]{0});
-        cipher.setKey(key);
-        int[][] encrypt = cipher.encrypt(marchThroughImage);
-        saveImage(fn+"_en.png", encrypt, image.getWidth(), image.getHeight());
-    }
-    
-    public static void testImageVigenereDecrypt() {
-        String fn = "tes";
-        BufferedImage image = UtilImageIO.loadImage(fn+"_en.png");
-        int[][] marchThroughImage = marchThroughImage(image);
-        TwoDimensionsVigenereCipher cipher = new TwoDimensionsVigenereCipher();
-        SimpleKey<int[]> key;
-        key = new SimpleKey();
-        key.setKey(new int[]{219,119,23,145,89,34,123,65,45,78,254,132});
-//        key.setKey(new int[]{0});
-        cipher.setKey(key);
-        int[][] decrypt = cipher.decrypt(marchThroughImage);
-        saveImage(fn+"_de.png", decrypt, image.getWidth(), image.getHeight());
-    }
+//    public static void testImageVigenereEncrypt() {
+//        String fn = "benera";
+//        BufferedImage image = UtilImageIO.loadImage(fn+".png");
+//        int[][] marchThroughImage = marchThroughImage(image);
+//        TwoDimensionsVigenereCipher cipher = new TwoDimensionsVigenereCipher();
+//        SimpleKey<int[]> key;
+//        key = new SimpleKey();
+//        key.setKey(new int[]{219,119,23,145,89,34,123,65,45,78,254,132});
+////        key.setKey(new int[]{0});
+//        cipher.setKey(key);
+//        int[][] encrypt = cipher.encrypt(marchThroughImage);
+//        saveImage(fn+"_en.png", encrypt, image.getWidth(), image.getHeight());
+//    }
+//    
+//    public static void testImageVigenereDecrypt() {
+//        String fn = "benera";
+//        BufferedImage image = UtilImageIO.loadImage(fn+"_en.png");
+//        int[][] marchThroughImage = marchThroughImage(image);
+//        TwoDimensionsVigenereCipher cipher = new TwoDimensionsVigenereCipher();
+//        SimpleKey<int[]> key;
+//        key = new SimpleKey();
+//        key.setKey(new int[]{219,119,23,145,89,34,123,65,45,78,254,132});
+////        key.setKey(new int[]{0});
+//        cipher.setKey(key);
+//        int[][] decrypt = cipher.decrypt(marchThroughImage);
+//        saveImage(fn+"_de.png", decrypt, image.getWidth(), image.getHeight());
+//    }
     
     public static void saveImage(String filename, int[][] data, int width, int height){
-        BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
+        BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
         int count = 0;
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                int rgb = data[0][count];
+                int rgb = data[3][count];
+                rgb = (rgb << 8) + data[0][count];
                 rgb = (rgb << 8) + data[1][count];
                 rgb = (rgb << 8) + data[2][count];
                 bi.setRGB(j, i, rgb);
@@ -137,7 +136,7 @@ public class MainCryptImg {
         int w = image.getWidth();
         int h = image.getHeight();
 
-        int[][] extract = new int[3][w * h];
+        int[][] extract = new int[4][w * h];
 
         int count = 0;
         for (int i = 0; i < h; i++) {
@@ -146,9 +145,55 @@ public class MainCryptImg {
                 extract[0][count] = extractRed(pixel);
                 extract[1][count] = extractGreen(pixel);
                 extract[2][count] = extractBlue(pixel);
+                extract[3][count] = extractAlpha(pixel);
                 count++;
             }
         }
         return extract;
+    }
+    
+    private static int[][][] marchThroughImageByRow(BufferedImage image) {
+
+        int w = image.getWidth();
+        int h = image.getHeight();
+
+        int[][][] extract = new int[4][h][w];
+
+        int count = 0;
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < w; j++) {
+                int pixel = image.getRGB(j, i);
+                extract[0][i][j] = extractRed(pixel);
+                extract[1][i][j] = extractGreen(pixel);
+                extract[2][i][j] = extractBlue(pixel);
+                extract[3][i][j] = extractAlpha(pixel);
+                count++;
+            }
+        }
+        return extract;
+    }
+    
+    private static int[][] convertItBack(int[][][] data){
+        printMatrix(data[0]);
+        System.out.println("-----------------------");
+        printMatrix(data[1]);
+        System.out.println("-----------------------");
+        printMatrix(data[2]);
+        System.out.println("-----------------------");
+        printMatrix(data[3]);
+        System.out.println("-----------------------");
+        int he = data[0].length;
+        int wi = data[0][0].length;
+        int[][] fin = new int[data.length][wi*he];
+//        System.out.println(":"+he+" "+wi);
+        for (int ch = 0; ch < data.length; ch++) {
+            for (int h = 0, idx = 0; h < he; h++) {
+                for (int w = 0; w < wi-2; w++,idx++) {
+//                    System.out.println("::"+ch+" "+h+" "+w+" "+idx);
+                    fin[ch][idx] = data[ch][h][w];
+                }
+            }
+        }
+        return fin;
     }
 }
