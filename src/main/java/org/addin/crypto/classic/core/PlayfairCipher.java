@@ -25,7 +25,7 @@ public class PlayfairCipher implements Encipherment<int[]> {
         isKeySet();
         isBogusDomainSet();
 
-        int[] plainEven = insertBogusBetweenTwin(plainText);
+        int[] plainEven = insertBogusBetweenTwinAndAtOddEnd(plainText);
 
         int[] cipherText = new int[plainEven.length];
 
@@ -37,15 +37,22 @@ public class PlayfairCipher implements Encipherment<int[]> {
             int[] pos1 = findPositionInKey(el1);
             int[] pos2 = findPositionInKey(el2);
 
-            if (pos1[0] == pos2[0]) {
-                cipherText[idx - 1] = getElementInKey(pos1[0], (pos1[1] + 1) % key[pos1[0]].length);
-                cipherText[idx] = getElementInKey(pos2[0], (pos2[1] + 1) % key[pos2[0]].length);
+            if (el1 == el2) {
+                int[] ciphDigraphs = onEqualValueEncrypt(new int[]{el1, el2});
+                cipherText[idx - 1] = ciphDigraphs[0];
+                cipherText[idx] = ciphDigraphs[1];
+            } else if (pos1[0] == pos2[0]) {
+                int[] ciphDigraphs = onSameRowEncrypt(pos1[0], pos1[1], pos2[0], pos2[1]);
+                cipherText[idx - 1] = ciphDigraphs[0];
+                cipherText[idx] = ciphDigraphs[1];
             } else if (pos1[1] == pos2[1]) {
-                cipherText[idx - 1] = getElementInKey((pos1[0] + 1) % key.length, pos1[1]);
-                cipherText[idx] = getElementInKey((pos2[0] + 1) % key.length, pos2[1]);
+                int[] ciphDigraphs = onSameColumnEncrypt(pos1[0], pos1[1], pos2[0], pos2[1]);
+                cipherText[idx - 1] = ciphDigraphs[0];
+                cipherText[idx] = ciphDigraphs[1];
             } else {
-                cipherText[idx - 1] = getElementInKey(pos1[0], pos2[1]);
-                cipherText[idx] = getElementInKey(pos2[0], pos1[1]);
+                int[] ciphDigraphs = onDifferentRowAndColumnEncrypt(pos1[0], pos1[1], pos2[0], pos2[1]);
+                cipherText[idx - 1] = ciphDigraphs[0];
+                cipherText[idx] = ciphDigraphs[1];
             }
         }
 
@@ -68,33 +75,22 @@ public class PlayfairCipher implements Encipherment<int[]> {
 
             int diff = 0;
 
-            if (pos1[0] == pos2[0]) {
-                diff = pos1[1] - 1;
-                if (diff < 0) {
-                    diff = diff + key[pos1[0]].length;
-                }
-                plainText[idx - 1] = getElementInKey(pos1[0], (diff) % key[pos1[0]].length);
-
-                diff = pos2[1] - 1;
-                if (diff < 0) {
-                    diff = diff + key[pos2[0]].length;
-                }
-                plainText[idx] = getElementInKey(pos2[0], (diff) % key[pos2[0]].length);
+            if (el1 == el2) {
+                int[] plainDigraphs = onEqualValueDecrypt(new int[]{el1, el2});
+                plainText[idx - 1] = plainDigraphs[0];
+                plainText[idx] = plainDigraphs[1];
+            } else if (pos1[0] == pos2[0]) {
+                int[] plainDigraphs = onSameRowDecrypt(pos1[0], pos1[1], pos2[0], pos2[1]);
+                plainText[idx - 1] = plainDigraphs[0];
+                plainText[idx] = plainDigraphs[1];
             } else if (pos1[1] == pos2[1]) {
-                diff = pos1[0] - 1;
-                if (diff < 0) {
-                    diff = diff + key.length;
-                }
-                plainText[idx - 1] = getElementInKey((diff) % key.length, pos1[1]);
-
-                diff = pos2[0] - 1;
-                if (diff < 0) {
-                    diff = diff + key.length;
-                }
-                plainText[idx] = getElementInKey((diff) % key.length, pos2[1]);
+                int[] plainDigraphs = onSameColumnDecrypt(pos1[0], pos1[1], pos2[0], pos2[1]);
+                plainText[idx - 1] = plainDigraphs[0];
+                plainText[idx] = plainDigraphs[1];
             } else {
-                plainText[idx - 1] = getElementInKey(pos1[0], pos2[1]);
-                plainText[idx] = getElementInKey(pos2[0], pos1[1]);
+                int[] plainDigraphs = onDifferentRowAndColumnDecrypt(pos1[0], pos1[1], pos2[0], pos2[1]);
+                plainText[idx - 1] = plainDigraphs[0];
+                plainText[idx] = plainDigraphs[1];
             }
         }
         // removing bogus
@@ -104,7 +100,7 @@ public class PlayfairCipher implements Encipherment<int[]> {
     }
 
     @Override
-    public void setKey(SimpleKey key) throws InappropriateKeyException,ClassCastException {
+    public void setKey(SimpleKey key) throws InappropriateKeyException, ClassCastException {
         int[][] keyA = null;
         try {
             keyA = (int[][]) key.getKey();
@@ -128,7 +124,7 @@ public class PlayfairCipher implements Encipherment<int[]> {
         return bogusDomain;
     }
 
-    private int[] insertBogusBetweenTwin(int[] input) {
+    protected int[] insertBogusBetweenTwinAndAtOddEnd(int[] input) {
         // need something dynamic.
         ArrayList<Integer> outp = new ArrayList<>();
 
@@ -157,7 +153,7 @@ public class PlayfairCipher implements Encipherment<int[]> {
         return output;
     }
 
-    private int[] removeBogus(int[] input) {
+    protected int[] removeBogus(int[] input) {
         // need something dynamic.
         ArrayList<Integer> outp = new ArrayList<>();
 
@@ -213,7 +209,7 @@ public class PlayfairCipher implements Encipherment<int[]> {
         return null;
     }
 
-    private int getElementInKey(int x, int y) {
+    protected int getElementInKey(int x, int y) {
         isKeySet();
         return key[x][y];
     }
@@ -242,5 +238,73 @@ public class PlayfairCipher implements Encipherment<int[]> {
         }
 
         return c == ordo;
+    }
+
+    protected int[] onEqualValueEncrypt(int[] digraph) {
+        throw new RuntimeException("No twin digraph allowed in playfair cipher.");
+    }
+
+    protected int[] onSameRowEncrypt(int x1, int y1, int x2, int y2) {
+        int[] output = new int[2];
+        output[0] = getElementInKey(x1, (y1 + 1) % key[x1].length);
+        output[1] = getElementInKey(x2, (y2 + 1) % key[x2].length);
+        return output;
+    }
+
+    protected int[] onSameColumnEncrypt(int x1, int y1, int x2, int y2) {
+        int[] output = new int[2];
+        output[0] = getElementInKey((x1 + 1) % key.length, y1);
+        output[1] = getElementInKey((x2 + 1) % key.length, y2);
+        return output;
+    }
+
+    protected int[] onDifferentRowAndColumnEncrypt(int x1, int y1, int x2, int y2) {
+        int[] output = new int[2];
+        output[0] = getElementInKey(x1, y2);
+        output[1] = getElementInKey(x2, y1);
+        return output;
+    }
+
+    protected int[] onEqualValueDecrypt(int[] digraph) {
+        throw new RuntimeException("No twin digraph allowed in playfair cipher.");
+    }
+
+    protected int[] onSameRowDecrypt(int x1, int y1, int x2, int y2) {
+        int[] output = new int[2];
+        int diff = y1 - 1;
+        if (diff < 0) {
+            diff = diff + key[x1].length;
+        }
+        output[0] = getElementInKey(x1, (diff) % key[x1].length);
+
+        diff = y2 - 1;
+        if (diff < 0) {
+            diff = diff + key[x2].length;
+        }
+        output[1] = getElementInKey(x2, (diff) % key[x2].length);
+        return output;
+    }
+
+    protected int[] onSameColumnDecrypt(int x1, int y1, int x2, int y2) {
+        int[] output = new int[2];
+        int diff = x1 - 1;
+        if (diff < 0) {
+            diff = diff + key.length;
+        }
+        output[0] = getElementInKey((diff) % key.length, y1);
+
+        diff = x2 - 1;
+        if (diff < 0) {
+            diff = diff + key.length;
+        }
+        output[1] = getElementInKey((diff) % key.length, y2);
+        return output;
+    }
+
+    protected int[] onDifferentRowAndColumnDecrypt(int x1, int y1, int x2, int y2) {
+        int[] output = new int[2];
+        output[0] = getElementInKey(x1, y2);
+        output[1] = getElementInKey(x2, y1);
+        return output;
     }
 }
