@@ -13,19 +13,9 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.boofcv</groupId>
-            <artifactId>ip</artifactId>
-            <version>${boofcv.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.boofcv</groupId>
-            <artifactId>io</artifactId>
-            <version>${boofcv.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.boofcv</groupId>
-            <artifactId>visualize</artifactId>
-            <version>${boofcv.version}</version>
+            <groupId>ar.com.hjg</groupId>
+            <artifactId>pngj</artifactId>
+            <version>2.1.0</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
