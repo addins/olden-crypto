@@ -11,6 +11,7 @@ import java.io.File;
 import java.security.SecureRandom;
 import org.addin.crypto.classic.core.SimpleKey;
 import org.addin.crypto.classic.image.ImageLineIntSuperEncryption;
+import org.addin.crypto.classic.image.SpecialPlayfairCipher;
 
 /**
  *
@@ -22,9 +23,11 @@ public class SamplePngj {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-//        testEncryptImage();
-//        testDecryptImage();
-        testGenerateMatrix();
+        testEncryptImage();
+        testDecryptImage();
+//        testPlayfairImageEnc();
+//        testPlayfairImageDec();
+//        testGenerateMatrix();
     }
 
     public static void sample() {
@@ -52,8 +55,8 @@ public class SamplePngj {
     }
 
     public static void testEncryptImage() {
-        String fileName = "drawing.png";
-        String encrFileName = "drawing_en.png";
+        String fileName = "tes2.png";
+        String encrFileName = "tes2_en.png";
 
         PngReader pngr = new PngReader(new File(fileName));
         System.out.println(pngr);
@@ -82,8 +85,8 @@ public class SamplePngj {
     }
 
     public static void testDecryptImage() {
-        String fileName = "drawing_en.png";
-        String encrFileName = "drawing_de.png";
+        String fileName = "tes2_en.png";
+        String encrFileName = "tes2_de.png";
 
         PngReader pngr = new PngReader(new File(fileName));
         System.out.println(pngr);
@@ -104,6 +107,113 @@ public class SamplePngj {
         for (int row = 0; row < pngr.imgInfo.rows; row++) {
             IImageLine l1 = pngr.readRow();
             cipher.decrypt((ImageLineInt) l1);
+            pngw.writeRow(l1);
+        }
+        pngr.end();
+        pngw.end();
+    }
+    
+    
+    public static void testPlayfairImageEnc(){
+        String fileName = "tes2.png";
+        String encrFileName = "tes2_en.png";
+
+        PngReader pngr = new PngReader(new File(fileName));
+        System.out.println(pngr);
+
+        int channels = pngr.imgInfo.channels;
+        if (channels < 3 || pngr.imgInfo.bitDepth != 8) {
+            throw new RuntimeException("this method is for RGB8/RGBA8 images");
+        }
+
+        SpecialPlayfairCipher cipher = new SpecialPlayfairCipher(256);
+        SimpleKey<int[][]> key = new SimpleKey<>();
+        int[][] mtx = getDiagonalMatrix(16);
+        key.setKey(mtx);
+        cipher.setKey(key);
+
+        PngWriter pngw = new PngWriter(new File(encrFileName), pngr.imgInfo, true);
+        pngw.copyChunksFrom(pngr.getChunksList(), ChunkCopyBehaviour.COPY_ALL_SAFE);
+        pngw.getMetadata().setText(PngChunkTextVar.KEY_Description, "encrypted image");
+        for (int row = 0; row < pngr.imgInfo.rows; row++) {
+            IImageLine l1 = pngr.readRow();
+            int[] scanline = ((ImageLineInt) l1).getScanline();
+            int[] redPlain = new int[pngr.imgInfo.cols];
+            int[] greenPlain = new int[pngr.imgInfo.cols];
+            int[] bluePlain = new int[pngr.imgInfo.cols];
+
+            int[] red1stCiph = null;
+            int[] green1stCiph = null;
+            int[] blue1stCiph = null;
+
+            for (int j = 0; j < pngr.imgInfo.cols; j++) {
+                redPlain[j] = scanline[j * channels];
+                greenPlain[j] = scanline[j * channels + 1];
+                bluePlain[j] = scanline[j * channels + 2];
+            }
+
+            red1stCiph = cipher.encrypt(redPlain);
+            green1stCiph = cipher.encrypt(greenPlain);
+            blue1stCiph = cipher.encrypt(bluePlain);
+            
+            for (int j = 0; j < pngr.imgInfo.cols; j++) {
+                scanline[j * channels] = red1stCiph[j];
+                scanline[j * channels + 1] = green1stCiph[j];
+                scanline[j * channels + 2] = blue1stCiph[j];
+            }
+            pngw.writeRow(l1);
+        }
+        pngr.end();
+        pngw.end();
+    }
+    
+    public static void testPlayfairImageDec(){
+        String fileName = "tes2_en.png";
+        String encrFileName = "tes2_de.png";
+
+        PngReader pngr = new PngReader(new File(fileName));
+        System.out.println(pngr);
+
+        int channels = pngr.imgInfo.channels;
+        if (channels < 3 || pngr.imgInfo.bitDepth != 8) {
+            throw new RuntimeException("this method is for RGB8/RGBA8 images");
+        }
+
+        SpecialPlayfairCipher cipher = new SpecialPlayfairCipher(256);
+        SimpleKey<int[][]> key = new SimpleKey<>();
+        int[][] mtx = getDiagonalMatrix(16);
+        key.setKey(mtx);
+        cipher.setKey(key);
+
+        PngWriter pngw = new PngWriter(new File(encrFileName), pngr.imgInfo, true);
+        pngw.copyChunksFrom(pngr.getChunksList(), ChunkCopyBehaviour.COPY_ALL_SAFE);
+        pngw.getMetadata().setText(PngChunkTextVar.KEY_Description, "encrypted image");
+        for (int row = 0; row < pngr.imgInfo.rows; row++) {
+            IImageLine l1 = pngr.readRow();
+            int[] scanline = ((ImageLineInt) l1).getScanline();
+            int[] redPlain = new int[pngr.imgInfo.cols];
+            int[] greenPlain = new int[pngr.imgInfo.cols];
+            int[] bluePlain = new int[pngr.imgInfo.cols];
+
+            int[] red1stCiph = null;
+            int[] green1stCiph = null;
+            int[] blue1stCiph = null;
+
+            for (int j = 0; j < pngr.imgInfo.cols; j++) {
+                redPlain[j] = scanline[j * channels];
+                greenPlain[j] = scanline[j * channels + 1];
+                bluePlain[j] = scanline[j * channels + 2];
+            }
+
+            red1stCiph = cipher.decrypt(redPlain);
+            green1stCiph = cipher.decrypt(greenPlain);
+            blue1stCiph = cipher.decrypt(bluePlain);
+            
+            for (int j = 0; j < pngr.imgInfo.cols; j++) {
+                scanline[j * channels] = red1stCiph[j];
+                scanline[j * channels + 1] = green1stCiph[j];
+                scanline[j * channels + 2] = blue1stCiph[j];
+            }
             pngw.writeRow(l1);
         }
         pngr.end();
