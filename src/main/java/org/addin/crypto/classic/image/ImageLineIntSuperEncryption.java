@@ -1,7 +1,6 @@
 package org.addin.crypto.classic.image;
 
 import ar.com.hjg.pngj.ImageInfo;
-import ar.com.hjg.pngj.ImageLineHelper;
 import ar.com.hjg.pngj.ImageLineInt;
 import org.addin.crypto.classic.core.Encipherment;
 import org.addin.crypto.classic.core.KeyStreamVigenereCipher;
