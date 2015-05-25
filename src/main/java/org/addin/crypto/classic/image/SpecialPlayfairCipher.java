@@ -42,8 +42,8 @@ public class SpecialPlayfairCipher extends PlayfairCipher {
     protected int[] removeBogus(int[] input) {
         int[] output = null;
         if (input.length % 2 == 0 && input[input.length-1]==getBogusDomain()) {
-            output = Arrays.copyOf(input, input.length - 1);
-            return output;
+                output = Arrays.copyOf(input, input.length - 1);
+                return output;
         }
         return input;
     }
