@@ -16,11 +16,11 @@ import org.addin.crypto.classic.core.VigenereCipher;
  */
 public class ImageLineIntSuperEncryption implements Encipherment<ImageLineInt> {
 
-    private SpecialPlayfairCipher playfairCipher;
-    private VigenereCipher vigenereCipher;
+    private final SpecialPlayfairCipher playfairCipher;
+    private final VigenereCipher vigenereCipher;
     
     //image related data
-    private ImageInfo imageInfo;
+    private final ImageInfo imageInfo;
 
     public ImageLineIntSuperEncryption(ImageInfo imageInfo) {
         playfairCipher = new SpecialPlayfairCipher(256);
@@ -36,13 +36,13 @@ public class ImageLineIntSuperEncryption implements Encipherment<ImageLineInt> {
         int[] greenPlain = new int[imageInfo.cols];
         int[] bluePlain = new int[imageInfo.cols];
         
-        int[] red1stCiph = null;
-        int[] green1stCiph = null;
-        int[] blue1stCiph = null;
+        int[] red1stCiph;
+        int[] green1stCiph;
+        int[] blue1stCiph;
         
-        int[] red2ndCiph = null;
-        int[] green2ndCiph = null;
-        int[] blue2ndCiph = null;
+        int[] red2ndCiph;
+        int[] green2ndCiph;
+        int[] blue2ndCiph;
         
         for (int j = 0; j < imageInfo.cols ; j++) {
             redPlain[j] = scanline[j*channels];
@@ -75,13 +75,13 @@ public class ImageLineIntSuperEncryption implements Encipherment<ImageLineInt> {
         int[] greenCiph = new int[imageInfo.cols];
         int[] blueCiph = new int[imageInfo.cols];
         
-        int[] red1stPlain = null;
-        int[] green1stPlain = null;
-        int[] blue1stPlain = null;
+        int[] red1stPlain;
+        int[] green1stPlain;
+        int[] blue1stPlain;
         
-        int[] red2ndPlain = null;
-        int[] green2ndPlain = null;
-        int[] blue2ndPlain = null;
+        int[] red2ndPlain;
+        int[] green2ndPlain;
+        int[] blue2ndPlain;
         
         for (int j = 0; j < imageInfo.cols ; j++) {
             redCiph[j] = scanline[j*channels];
