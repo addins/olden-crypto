@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class KeyStreamVigenereCipher extends VigenereCipher {
     
     private final ArrayList<Integer> keystream;
+    private int streamPos = -1;
 
     public KeyStreamVigenereCipher(int elementDomain) {
         super(elementDomain);
@@ -18,6 +19,13 @@ public class KeyStreamVigenereCipher extends VigenereCipher {
     @Override
     protected int getKeyElementAt(int i) {
         int m = key.getKey().length;
+        
+        if (i == 0) {
+            streamPos++;
+        }
+        if (streamPos > -1) {
+            i = i + streamPos * m;
+        }
         if(i>=m){
             int ki1,ki2;
             if(i-1 >= m)
