@@ -7,6 +7,13 @@ package org.addin.crypto.classic.core;
 public class SimpleKey<T> {
     private T key;
 
+    public SimpleKey(T key) {
+        this.key = key;
+    }
+
+    public SimpleKey() {
+    }
+
     public T getKey() {
         return key;
     }
