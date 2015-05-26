@@ -5,7 +5,6 @@ import ar.com.hjg.pngj.ImageLineInt;
 import org.addin.crypto.classic.core.Encipherment;
 import org.addin.crypto.classic.core.KeyStreamVigenereCipher;
 import org.addin.crypto.classic.core.SimpleKey;
-import org.addin.crypto.classic.core.VigenereCipher;
 
 /**
  * This class is only for encrypting/decrypting image data that has RGB/RGBA 
@@ -17,7 +16,7 @@ import org.addin.crypto.classic.core.VigenereCipher;
 public class ImageLineIntSuperEncryption implements Encipherment<ImageLineInt> {
 
     private final SpecialPlayfairCipher playfairCipher;
-    private final VigenereCipher vigenereCipher;
+    private final KeyStreamVigenereCipher vigenereCipher;
     
     //image related data
     private final ImageInfo imageInfo;
