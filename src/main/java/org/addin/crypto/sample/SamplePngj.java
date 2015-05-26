@@ -10,7 +10,9 @@ import ar.com.hjg.pngj.chunks.PngChunkTextVar;
 import java.io.File;
 import java.security.SecureRandom;
 import org.addin.crypto.classic.core.SimpleKey;
+import org.addin.crypto.classic.image.ImageEncipherment;
 import org.addin.crypto.classic.image.ImageLineIntSuperEncryption;
+import org.addin.crypto.classic.image.PngImageSuperEncryption;
 import org.addin.crypto.classic.image.SpecialPlayfairCipher;
 
 /**
@@ -58,59 +60,19 @@ public class SamplePngj {
         String fileName = "tes2.png";
         String encrFileName = "tes2_en.png";
 
-        PngReader pngr = new PngReader(new File(fileName));
-        System.out.println(pngr);
-
-        int channels = pngr.imgInfo.channels;
-        if (channels < 3 || pngr.imgInfo.bitDepth != 8) {
-            throw new RuntimeException("this method is for RGB8/RGBA8 images");
-        }
-
-        ImageLineIntSuperEncryption cipher = new ImageLineIntSuperEncryption(pngr.imgInfo);
-        SimpleKey<int[][]> key = new SimpleKey<>();
-        int[][] mtx = getDiagonalMatrix(16);
-        key.setKey(mtx);
-        cipher.setKey(key);
-
-        PngWriter pngw = new PngWriter(new File(encrFileName), pngr.imgInfo, true);
-        pngw.copyChunksFrom(pngr.getChunksList(), ChunkCopyBehaviour.COPY_ALL_SAFE);
-        pngw.getMetadata().setText(PngChunkTextVar.KEY_Description, "encrypted image");
-        for (int row = 0; row < pngr.imgInfo.rows; row++) {
-            IImageLine l1 = pngr.readRow();
-            cipher.encrypt((ImageLineInt) l1);
-            pngw.writeRow(l1);
-        }
-        pngr.end();
-        pngw.end();
+        PngImageSuperEncryption pise = new PngImageSuperEncryption(fileName, encrFileName);
+        pise.setKey(new SimpleKey<>(getDiagonalMatrix(16)));
+        pise.process(ImageEncipherment.ENCRYPT_MODE);
+        
     }
 
     public static void testDecryptImage() {
         String fileName = "tes2_en.png";
         String encrFileName = "tes2_de.png";
 
-        PngReader pngr = new PngReader(new File(fileName));
-        System.out.println(pngr);
-
-        int channels = pngr.imgInfo.channels;
-        if (channels < 3 || pngr.imgInfo.bitDepth != 8) {
-            throw new RuntimeException("this method is for RGB8/RGBA8 images");
-        }
-
-        ImageLineIntSuperEncryption cipher = new ImageLineIntSuperEncryption(pngr.imgInfo);
-        SimpleKey<int[][]> key = new SimpleKey<>();
-        key.setKey(getDiagonalMatrix(16));
-        cipher.setKey(key);
-
-        PngWriter pngw = new PngWriter(new File(encrFileName), pngr.imgInfo, true);
-        pngw.copyChunksFrom(pngr.getChunksList(), ChunkCopyBehaviour.COPY_ALL_SAFE);
-        pngw.getMetadata().setText(PngChunkTextVar.KEY_Description, "encrypted image");
-        for (int row = 0; row < pngr.imgInfo.rows; row++) {
-            IImageLine l1 = pngr.readRow();
-            cipher.decrypt((ImageLineInt) l1);
-            pngw.writeRow(l1);
-        }
-        pngr.end();
-        pngw.end();
+        PngImageSuperEncryption pise = new PngImageSuperEncryption(fileName, encrFileName);
+        pise.setKey(new SimpleKey<>(getDiagonalMatrix(16)));
+        pise.process(ImageEncipherment.DECRYPT_MODE);
     }
     
     
