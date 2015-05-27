@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 /**
  *
@@ -84,7 +85,7 @@ public class ImageLineIntSuperEncryptionTest {
         ImageLineInt expResult = createCipherImageLine();
         
         ImageLineInt result = instance.encrypt(plainText);
-        assertEquals(expResult, result);
+        assertArrayEquals(expResult.getScanline(), result.getScanline());
     }
 
     /**
@@ -93,13 +94,15 @@ public class ImageLineIntSuperEncryptionTest {
     @Test
     public void testDecrypt() {
         System.out.println("decrypt");
-        ImageLineInt cipherText = null;
-        ImageLineIntSuperEncryption instance = null;
-        ImageLineInt expResult = null;
+        ImageLineInt cipherText = createCipherImageLine();
+        
+        ImageLineIntSuperEncryption instance = new ImageLineIntSuperEncryption(imageInfo);
+        instance.setKey(key);
+        
+        ImageLineInt expResult = createPlainImageLine();
+        
         ImageLineInt result = instance.decrypt(cipherText);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertArrayEquals(expResult.getScanline(), result.getScanline());
     }
 
     /**
