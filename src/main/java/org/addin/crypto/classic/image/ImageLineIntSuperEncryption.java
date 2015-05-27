@@ -111,6 +111,11 @@ public class ImageLineIntSuperEncryption implements Encipherment<ImageLineInt> {
         playfairCipher.setKey(key);
         int[][] kM = (int[][])key.getKey();
         int l = kM[0][0];
+        
+        // avoid l to be zero, in case the first element is zero. :D
+        if(l==0)
+            l = kM[0][1];
+        
         int[] vcKey = new int[l];
         int count = 0;
         for (int i = 0; i < kM.length && count < l; i++) {
