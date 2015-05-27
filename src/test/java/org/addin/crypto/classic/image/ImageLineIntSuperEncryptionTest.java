@@ -10,6 +10,7 @@ import ar.com.hjg.pngj.ImageLineHelper;
 import ar.com.hjg.pngj.ImageLineInt;
 import org.addin.crypto.classic.core.SimpleKey;
 import org.addin.crypto.classic.core.util.SimpleKeyGen;
+import org.addin.crypto.sample.SamplePngj;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -161,11 +162,11 @@ public class ImageLineIntSuperEncryptionTest {
     private ImageLineInt createCipherImageLine() {
         ImageLineInt ili = new ImageLineInt(imageInfo);
         
-        ImageLineHelper.setPixelRGB8(ili, 0, 97, 117, 97);
-        ImageLineHelper.setPixelRGB8(ili, 1, 179, 166, 4);
-        ImageLineHelper.setPixelRGB8(ili, 2, 133, 85, 237);
-        ImageLineHelper.setPixelRGB8(ili, 3, 30, 73, 81);
-        ImageLineHelper.setPixelRGB8(ili, 4, 230, 229, 145);
+        ImageLineHelper.setPixelRGB8(ili, 0, 232, 211, 97);
+        ImageLineHelper.setPixelRGB8(ili, 1, 205, 65, 4);
+        ImageLineHelper.setPixelRGB8(ili, 2, 227, 153, 184);
+        ImageLineHelper.setPixelRGB8(ili, 3, 174, 179, 36);
+        ImageLineHelper.setPixelRGB8(ili, 4, 241, 229, 145);
         
         return ili;
     }
