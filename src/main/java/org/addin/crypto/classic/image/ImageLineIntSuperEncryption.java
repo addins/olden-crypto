@@ -16,14 +16,18 @@ import org.addin.crypto.classic.core.SimpleKey;
 public class ImageLineIntSuperEncryption implements Encipherment<ImageLineInt> {
 
     private final SpecialPlayfairCipher playfairCipher;
-    private final KeyStreamVigenereCipher vigenereCipher;
+    private final KeyStreamVigenereCipher vigenereCipherForR;
+    private final KeyStreamVigenereCipher vigenereCipherForG;
+    private final KeyStreamVigenereCipher vigenereCipherForB;
     
     //image related data
     private final ImageInfo imageInfo;
 
     public ImageLineIntSuperEncryption(ImageInfo imageInfo) {
         playfairCipher = new SpecialPlayfairCipher(256);
-        vigenereCipher = new KeyStreamVigenereCipher(256);
+        vigenereCipherForR = new KeyStreamVigenereCipher(256);
+        vigenereCipherForG = new KeyStreamVigenereCipher(256);
+        vigenereCipherForB = new KeyStreamVigenereCipher(256);
         this.imageInfo = imageInfo;
     }
     
@@ -49,9 +53,9 @@ public class ImageLineIntSuperEncryption implements Encipherment<ImageLineInt> {
             bluePlain[j] = scanline[j*channels+2];
         }
         
-        red1stCiph = vigenereCipher.encrypt(redPlain);
-        green1stCiph = vigenereCipher.encrypt(greenPlain);
-        blue1stCiph = vigenereCipher.encrypt(bluePlain);
+        red1stCiph = vigenereCipherForR.encrypt(redPlain);
+        green1stCiph = vigenereCipherForG.encrypt(greenPlain);
+        blue1stCiph = vigenereCipherForB.encrypt(bluePlain);
         
         red2ndCiph = playfairCipher.encrypt(red1stCiph);
         green2ndCiph = playfairCipher.encrypt(green1stCiph);
@@ -92,9 +96,9 @@ public class ImageLineIntSuperEncryption implements Encipherment<ImageLineInt> {
         green1stPlain = playfairCipher.decrypt(greenCiph);
         blue1stPlain = playfairCipher.decrypt(blueCiph);
         
-        red2ndPlain = vigenereCipher.decrypt(red1stPlain);
-        green2ndPlain = vigenereCipher.decrypt(green1stPlain);
-        blue2ndPlain = vigenereCipher.decrypt(blue1stPlain);
+        red2ndPlain = vigenereCipherForR.decrypt(red1stPlain);
+        green2ndPlain = vigenereCipherForG.decrypt(green1stPlain);
+        blue2ndPlain = vigenereCipherForB.decrypt(blue1stPlain);
         
         
         for (int j = 0; j < imageInfo.cols ; j++) {
@@ -126,7 +130,9 @@ public class ImageLineIntSuperEncryption implements Encipherment<ImageLineInt> {
         }
         SimpleKey<int[]> vgK = new SimpleKey<>();
         vgK.setKey(vcKey);
-        vigenereCipher.setKey(vgK);
+        vigenereCipherForR.setKey(vgK);
+        vigenereCipherForG.setKey(vgK);
+        vigenereCipherForB.setKey(vgK);
     }
     
 }
