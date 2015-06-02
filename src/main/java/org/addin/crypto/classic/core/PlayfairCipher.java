@@ -11,7 +11,7 @@ import org.addin.crypto.classic.core.exception.InvalidBogusDomainException;
  */
 public class PlayfairCipher implements Encipherment<int[]> {
 
-    private int[][] key;
+    protected int[][] key;
     private int bogusDomain = -1;
 
     protected final int elementDomain;
@@ -197,7 +197,7 @@ public class PlayfairCipher implements Encipherment<int[]> {
         }
     }
 
-    private int[] findPositionInKey(int element) {
+    protected final int[] findPositionInKey(int element) {
         isKeySet();
         for (int i = 0; i < key.length; i++) {
             for (int j = 0; j < key[i].length; j++) {
@@ -209,7 +209,7 @@ public class PlayfairCipher implements Encipherment<int[]> {
         return null;
     }
 
-    protected int getElementInKey(int x, int y) {
+    protected final int getElementInKey(int x, int y) {
         isKeySet();
         return key[x][y];
     }

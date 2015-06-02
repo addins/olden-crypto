@@ -67,4 +67,29 @@ public class SpecialPlayfairCipher extends PlayfairCipher {
     protected int[] onEqualValueDecrypt(int[] digraph) {
         return digraph;
     }
+
+    @Override
+    public int[] decrypt(int[] cipherText) {
+        //cipherText = insertCipheredBogus(cipherText);
+        return super.decrypt(cipherText);
+    }
+    
+    private int[] insertCipheredBogus(int[] input){
+        int[] output = null;
+        if (input.length % 2 != 0) {
+            output = Arrays.copyOf(input, input.length + 1);
+            int[] beforeBogusPos = findPositionInKey(input[input.length-1]);
+            int[] bogusPos = findPositionInKey(getBogusDomain());
+            
+            if (beforeBogusPos[0] == bogusPos[0]) {
+                output[input.length] = getElementInKey(bogusPos[0], (bogusPos[1]+1) % key.length);
+            } else if (beforeBogusPos[1] == bogusPos[1]) {
+                output[input.length] = getElementInKey((bogusPos[0]+1) % key.length, bogusPos[1]);                
+            } else {
+                output[input.length] = getElementInKey(beforeBogusPos[0], bogusPos[1]);
+            }
+            return output;
+        }
+        return input;
+    }
 }
