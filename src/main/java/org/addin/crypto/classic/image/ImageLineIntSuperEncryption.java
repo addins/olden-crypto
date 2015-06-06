@@ -100,8 +100,17 @@ public class ImageLineIntSuperEncryption implements Encipherment<ImageLineInt> {
         green2ndPlain = vigenereCipherForG.decrypt(green1stPlain);
         blue2ndPlain = vigenereCipherForB.decrypt(blue1stPlain);
         
-        
+        int idx = 0;
         for (int j = 0; j < imageInfo.cols ; j++) {
+            idx = j*channels+2;
+            if(idx >= scanline.length)
+                break;
+            if(j>=red2ndPlain.length)
+                break;
+            if(j>=green2ndPlain.length)
+                break;
+            if(j>=blue2ndPlain.length)
+                break;
             scanline[j*channels] = red2ndPlain[j];
             scanline[j*channels+1] = green2ndPlain[j];
             scanline[j*channels+2] = blue2ndPlain[j];
