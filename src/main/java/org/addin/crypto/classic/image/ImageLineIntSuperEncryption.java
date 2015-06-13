@@ -2,6 +2,8 @@ package org.addin.crypto.classic.image;
 
 import ar.com.hjg.pngj.ImageInfo;
 import ar.com.hjg.pngj.ImageLineInt;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.addin.crypto.classic.core.Encipherment;
 import org.addin.crypto.classic.core.KeyStreamVigenereCipher;
 import org.addin.crypto.classic.core.SimpleKey;
@@ -14,6 +16,8 @@ import org.addin.crypto.classic.core.SimpleKey;
  * @author addin <addins3009@gmail.com>
  */
 public class ImageLineIntSuperEncryption implements Encipherment<ImageLineInt> {
+    
+    Logger logger = Logger.getLogger(getClass().getSimpleName());
 
     private final SpecialPlayfairCipher playfairCipher;
     private final KeyStreamVigenereCipher vigenereCipherForR;
@@ -100,9 +104,11 @@ public class ImageLineIntSuperEncryption implements Encipherment<ImageLineInt> {
         green2ndPlain = vigenereCipherForG.decrypt(green1stPlain);
         blue2ndPlain = vigenereCipherForB.decrypt(blue1stPlain);
         
-        int idx = 0;
-        for (int j = 0; j < imageInfo.cols ; j++) {
-            idx = j*channels+2;
+        //int idx = 0;
+        int j = 0;
+        try{
+        for (; j < imageInfo.cols ; j++) {
+            /*idx = j*channels+2;
             if(idx >= scanline.length)
                 break;
             if(j>=red2ndPlain.length)
@@ -110,10 +116,15 @@ public class ImageLineIntSuperEncryption implements Encipherment<ImageLineInt> {
             if(j>=green2ndPlain.length)
                 break;
             if(j>=blue2ndPlain.length)
-                break;
+                break;*/
             scanline[j*channels] = red2ndPlain[j];
             scanline[j*channels+1] = green2ndPlain[j];
             scanline[j*channels+2] = blue2ndPlain[j];
+        }
+        }catch(RuntimeException e){
+            logger.log(Level.SEVERE, e.getMessage()+"------"
+                    + " more: \nj="+j+", \nchannels="+channels+". \n");
+            e.printStackTrace();
         }
         
         return cipherText;
@@ -125,7 +136,7 @@ public class ImageLineIntSuperEncryption implements Encipherment<ImageLineInt> {
         int[][] kM = (int[][])key.getKey();
         int l = kM[0][0];
         
-        // avoid l to be zero, in case the first element is zero. :D
+        // avoid logger to be zero, in case the first element is zero. :D
         if(l==0)
             l = kM[0][1];
         
