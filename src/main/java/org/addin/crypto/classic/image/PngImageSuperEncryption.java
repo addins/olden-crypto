@@ -77,6 +77,9 @@ public class PngImageSuperEncryption implements ImageEncipherment<SimpleKey<int[
         writer.getMetadata().setText(PngChunkTextVar.KEY_Description, "decrypted image");
         
         for (int row = 0; row < reader.imgInfo.rows; row++) {
+            System.out.println("row = " + row);
+            if(row==195)
+                System.out.println("-__-'");;                
             IImageLine l1 = reader.readRow();
             cipher.decrypt((ImageLineInt) l1);
             writer.writeRow(l1);
