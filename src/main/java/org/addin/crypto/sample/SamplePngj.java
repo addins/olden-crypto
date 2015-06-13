@@ -64,7 +64,6 @@ public class SamplePngj {
         String encrFileName = "bug1_en.png";
         
         STATIC_KEY = new SimpleKey<>(buggyKey());
-        printMatrix(STATIC_KEY.getKey());
         
         PngImageSuperEncryption pise = new PngImageSuperEncryption(fileName, encrFileName);
         pise.setKey(STATIC_KEY);

@@ -40,13 +40,6 @@ public class SpecialPlayfairCipher extends PlayfairCipher {
      */
     @Override
     protected int[] removeBogus(int[] input) {
-        /*
-        // suspect to be the bug
-        int[] output = null;
-        if (input.length % 2 == 0 && input[input.length-1]==getBogusDomain()) {
-                output = Arrays.copyOf(input, input.length - 1);
-                return output;
-        }*/
         return input;
     }
 
