@@ -115,7 +115,7 @@ public class ImageLineIntSuperEncryptionTest {
     @Test
     public void testSetKey() {
         System.out.println("setKey");
-        int[][] kM = SimpleKeyGen.generateSquareMatrix(16);
+        int[][] kM = new SimpleKeyGen(16).generateMatrix();
         swapZeroToFirst(kM);
         SimpleKey key = new SimpleKey(kM);
         ImageLineIntSuperEncryption instance = new ImageLineIntSuperEncryption(

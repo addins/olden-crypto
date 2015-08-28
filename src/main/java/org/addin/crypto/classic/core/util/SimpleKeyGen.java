@@ -6,10 +6,42 @@ import java.security.SecureRandom;
  *
  * @author addin <addins3009@gmail.com>
  */
-public class SimpleKeyGen {
-    public static int[][] generateSquareMatrix(int size){
-        int[] domain = getIntFromZeroTo(size*size);
-        shufflingElements(domain);
+public class SimpleKeyGen implements SimpleKeyShuffling {
+
+    /**
+     * implementation of Fisher-Yates Shuffle
+     * @param domain
+     * @return 
+     */
+    private int[] shufflingElements() {
+        SecureRandom sr = new SecureRandom();
+        for (int i = domain.length - 1; i > 0; i--) {
+            int idx = sr.nextInt(domain.length);
+            int a = domain[idx];
+            domain[idx] = domain[i];
+            domain[i] = a;
+        }
+        return domain;
+    }
+    
+    private int size;
+    private int[] domain;
+    private int[] shuffledDomain;
+
+    public SimpleKeyGen(int size) {
+        this.size = size;
+    }
+
+    @Override
+    public int[] shuffling() {
+        this.shuffledDomain = shufflingElements();
+        return this.shuffledDomain;
+    }
+
+    @Override
+    public int[][] generateMatrix() {
+        domain = IntDomainCreator.getIntFromZeroTo(size*size);
+        shuffling();
         
         int[][] mtx = new int[size][size];
         for (int i = 0, idx = 0; i < mtx.length; i++) {
@@ -18,29 +50,5 @@ public class SimpleKeyGen {
             }            
         }
         return mtx;
-    }
-
-    public static int[] getIntFromZeroTo(int to) {
-        int[] output = new int[to];
-        for (int i = 0; i < to; i++) {
-            output[i] = i;
-        }
-        return output;
-    }
-
-    /**
-     * implementation of Fisher-Yates Shuffle
-     * @param input
-     * @return 
-     */
-    public static int[] shufflingElements(int[] input) {
-        SecureRandom sr = new SecureRandom();
-        for (int i = input.length - 1; i > 0; i--) {
-            int idx = sr.nextInt(input.length);
-            int a = input[idx];
-            input[idx] = input[i];
-            input[i] = a;
-        }
-        return input;
     }
 }
