@@ -6,7 +6,7 @@ import java.security.SecureRandom;
  *
  * @author addin <addins3009@gmail.com>
  */
-public class SimpleKeyGen implements SimpleKeyShuffling {
+public class SimpleKeyGen extends SimpleKeyShuffling {
 
     /**
      * implementation of Fisher-Yates Shuffle
@@ -24,31 +24,13 @@ public class SimpleKeyGen implements SimpleKeyShuffling {
         return domain;
     }
     
-    private int size;
-    private int[] domain;
-    private int[] shuffledDomain;
-
     public SimpleKeyGen(int size) {
-        this.size = size;
+        super(size, IntDomainCreator.getIntFromZeroTo(size*size));
     }
 
     @Override
     public int[] shuffling() {
-        this.shuffledDomain = shufflingElements();
-        return this.shuffledDomain;
-    }
-
-    @Override
-    public int[][] generateMatrix() {
-        domain = IntDomainCreator.getIntFromZeroTo(size*size);
-        shuffling();
-        
-        int[][] mtx = new int[size][size];
-        for (int i = 0, idx = 0; i < mtx.length; i++) {
-            for (int j = 0; j < mtx[i].length; j++, idx++) {
-                mtx[i][j] = domain[idx];
-            }            
-        }
-        return mtx;
+        shufflingElements();
+        return domain;
     }
 }
