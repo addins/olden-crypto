@@ -10,7 +10,7 @@ public class TextKeyGen extends SimpleKeyShuffling {
 
     private String text;
 
-    public TextKeyGen(int size) {
+    private TextKeyGen(int size) {
         super(size, IntDomainCreator.getIntFromZeroTo(size*size));
     }
 

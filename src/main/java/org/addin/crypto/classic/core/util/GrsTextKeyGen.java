@@ -8,10 +8,6 @@ package org.addin.crypto.classic.core.util;
  */
 public class GrsTextKeyGen extends TextKeyGen {
 
-    public GrsTextKeyGen(int size) {
-        super(size);
-    }
-
     public GrsTextKeyGen(int size, String text) {
         super(size, text);
     }
