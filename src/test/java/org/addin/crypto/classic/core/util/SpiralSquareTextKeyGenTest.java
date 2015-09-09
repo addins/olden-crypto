@@ -43,7 +43,7 @@ public class SpiralSquareTextKeyGenTest {
     @Test
     public void testGenerateMatrix() {
         System.out.println("generateMatrix");
-        SpiralSquareTextKeyGen instance = new SpiralSquareTextKeyGen(16,"a");
+        SpiralSquareTextKeyGen instance = new SpiralSquareTextKeyGen(3,"a");
         int[][] expResult = new int[][]{{8,7,6},{3,0,1},{2,5,4}};
         int[][] result = instance.generateMatrix();
         print2dMatrix(result);
