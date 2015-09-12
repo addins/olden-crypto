@@ -1,5 +1,7 @@
 package org.addin.crypto.classic.core;
 
+import com.github.jtreport.annotation.TestClassReport;
+import com.github.jtreport.annotation.TestSingleReport;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertArrayEquals;
@@ -11,6 +13,7 @@ import org.junit.Test;
  *
  * @author addin <addins3009@gmail.com>
  */
+@TestClassReport(description = "Test class untuk KeyStreamVigenereCipher")
 public class KeyStreamVigenereCipherTest {
     
     SimpleKey<int[]> simpleKey;
@@ -39,6 +42,9 @@ public class KeyStreamVigenereCipherTest {
     /**
      * Test of encrypt method, of class KeyStreamVigenereCipher.
      */
+    @TestSingleReport(description = "melakukan enkripsi plain text {1,2,3,4,5,0,23}"
+            + " dengan key {3,2}"
+            , expectations = "menghasilkan cipher text {4,4,8,11,17,19,2}")
     @Test
     public void testEncrypt() {
         System.out.println("encrypt");
@@ -53,6 +59,9 @@ public class KeyStreamVigenereCipherTest {
     /**
      * Test of decrypt method, of class KeyStreamVigenereCipher.
      */
+    @TestSingleReport(description = "melakukan dekripsi cipher text {4,4,8,11,17,19,2}"
+            + " dengan key {3,2}"
+            , expectations = "menghasilkan cipher text {1,2,3,4,5,0,23}")
     @Test
     public void testDecrypt() {
         System.out.println("decrypt");

@@ -1,5 +1,7 @@
 package org.addin.crypto.classic.core.util;
 
+import com.github.jtreport.annotation.TestClassReport;
+import com.github.jtreport.annotation.TestSingleReport;
 import java.util.Arrays;
 import org.hamcrest.core.IsEqual;
 import org.hamcrest.core.IsNot;
@@ -15,6 +17,8 @@ import org.junit.Ignore;
  *
  * @author addin <addins3009@gmail.com>
  */
+@TestClassReport(description = "Test class untuk SimpleKeyGen, "
+        + "class yang berfungsi untuk membuat matriks persegi secara acak.")
 public class SimpleKeyGenTest {
     
     public SimpleKeyGenTest() {
@@ -39,6 +43,8 @@ public class SimpleKeyGenTest {
     /**
      * Test of generateSquareMatrix method, of class SimpleKeyGen.
      */
+    @TestSingleReport(description = "test untuk membuat matriks persegi 3x3 secara acak.",
+            expectations = " hasil tidak sama dengan {{0,1,2},{3,4,5},{6,7,8}}")
     @Test
     public void testGenerateSquareMatrix() {
         System.out.println("generateSquareMatrix");
@@ -51,8 +57,11 @@ public class SimpleKeyGenTest {
     /**
      * Test of getIntFromZeroTo method, of class SimpleKeyGen.
      */
+    @TestSingleReport(description = "test untuk membuat array 1 dimensi mulai dari "
+            + "0 hingga 9 (10 elemen).",
+            expectations = " hasil sama dengan {0,1,2,3,4,5,6,7,8,9}")
     @Test 
-    @Ignore
+    @Ignore(value = "tidak digunakan lagi karena method dengan fungsi itu sudah dipindah ke class lain.")
     public void testGetIntFromZeroTo() {
         System.out.println("getIntFromZeroTo");
         int to = 10;
@@ -64,8 +73,11 @@ public class SimpleKeyGenTest {
     /**
      * Test of shufflingElements method, of class SimpleKeyGen.
      */
+    @TestSingleReport(description = "test untuk mengacak array "
+            + "0 hingga 9 (10 elemen).",
+            expectations = " hasil TIDAK sama dengan {0,1,2,3,4,5,6,7,8,9}")
     @Test
-    @Ignore
+    @Ignore(value = "method dengan fungsi itu sudah dipindah ke class lain.")
     public void testShufflingElements() {
         System.out.println("shufflingElements");
         int[] input = new int[]{0,1,2,3,4,5,6,7,8,9};

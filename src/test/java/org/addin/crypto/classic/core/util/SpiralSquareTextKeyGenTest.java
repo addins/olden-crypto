@@ -5,6 +5,8 @@
  */
 package org.addin.crypto.classic.core.util;
 
+import com.github.jtreport.annotation.TestClassReport;
+import com.github.jtreport.annotation.TestSingleReport;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -16,6 +18,8 @@ import static org.junit.Assert.*;
  *
  * @author addin <addins3009@gmail.com>
  */
+@TestClassReport(description = "Test class untuk SpiralSquareTextKey, "
+        + "class yang berfungsi untuk membuat matriks persegi dengan input teks, dan disusun secara spiral")
 public class SpiralSquareTextKeyGenTest {
     
     public SpiralSquareTextKeyGenTest() {
@@ -40,6 +44,8 @@ public class SpiralSquareTextKeyGenTest {
     /**
      * Test of generateMatrix method, of class SpiralSquareTextKeyGen.
      */
+    @TestSingleReport(description = "test membuat matrix 3x3 dengan input teks 'a'",
+            expectations = "matriks yang dihasilkan sama dengan {{8,7,6},{3,0,1},{2,5,4}}")    
     @Test
     public void testGenerateMatrix() {
         System.out.println("generateMatrix");
