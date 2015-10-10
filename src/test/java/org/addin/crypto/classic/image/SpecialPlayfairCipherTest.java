@@ -31,10 +31,10 @@ public class SpecialPlayfairCipherTest {
     public void setUp() {
         key = new SimpleKey<>();
         key.setKey(new int[][]{
-            {'F','E','D','C'},
-            {'B','A','9','8'},
-            {'7','6','5','4'},
-            {'3','2','1','0'}
+            {15,14,13,12},
+            {11,10,9,8},
+            {7,6,5,4},
+            {3,2,1,0}
         });
     }
     
@@ -50,25 +50,11 @@ public class SpecialPlayfairCipherTest {
         System.out.println("insertBogusBetweenTwinAndAtOddEnd");
         int[] input = new int[]{85,56,45};
         SpecialPlayfairCipher instance = new SpecialPlayfairCipher(256);
-        int[] expResult = new int[]{85,56,45,0};
+        int[] expResult = new int[]{85,56,45,45};
         int[] result = instance.insertBogusBetweenTwinAndAtOddEnd(input);
         assertArrayEquals(expResult, result);
     }
 
-    /**
-     * Test of removeBogus method, of class SpecialPlayfairCipher.
-     * 
-     * P.S. this test no longer valid caused by an annoying bug. Sat Jun 13 22:51:12 WIB 2015.
-     */
-    // @Test
-    public void testRemoveBogus() {
-        System.out.println("removeBogus");
-        int[] input = new int[]{85,56,45,0};
-        SpecialPlayfairCipher instance = new SpecialPlayfairCipher(256);
-        int[] expResult = new int[]{85,56,45};
-        int[] result = instance.removeBogus(input);
-        assertArrayEquals(expResult, result);
-    }
 
     /**
      * Test of onEqualValueEncrypt method, of class SpecialPlayfairCipher.
@@ -104,11 +90,23 @@ public class SpecialPlayfairCipherTest {
     @Test
     public void testEncrypt(){
         System.out.println("encrypt plaintext that has repeated char and odd length");
-        int[] plainText = new int[]{'A','7','7','2','D','D','D'};
+        int[] plainText = new int[]{10,7,7,2,13,13,13};
         SpecialPlayfairCipher instance = new SpecialPlayfairCipher(16);
-        instance.setBogusDomain('A');
+        instance.setBogusDomain(10);
         instance.setKey(key);
-        int[] expResult = new int[]{'B','6','6','3','D','D','E','9'};
+        int[] expResult = new int[]{11,6,6,3,13,13,13};
+        int[] result = instance.encrypt(plainText);
+        assertArrayEquals(expResult, result);
+    }
+    
+    @Test
+    public void testEncryptDuplicate(){
+        System.out.println("encrypt plaintext that has repeated char and odd length");
+        int[] plainText = new int[]{10,7,7,7,13,13,13};
+        SpecialPlayfairCipher instance = new SpecialPlayfairCipher(16);
+        instance.setBogusDomain(10);
+        instance.setKey(key);
+        int[] expResult = new int[]{11,6,7,7,13,13,13};
         int[] result = instance.encrypt(plainText);
         assertArrayEquals(expResult, result);
     }
@@ -117,16 +115,15 @@ public class SpecialPlayfairCipherTest {
      * Test of decrypt method to decrypt ciphertext that the plaintext 
      * has repeated char and odd length, of class PlayfairCipher.
      * 
-     *  P.S. this test no longer valid caused by an annoying bug. Sat Jun 13 22:51:12 WIB 2015.
      */
-    // @Test
+    @Test
     public void testDecrypt(){
         System.out.println("decrypt ciphertext that has repeated char and odd length");
-        int[] cipherText = new int[]{'B','6','6','3','D','D','E','9'};
+        int[] cipherText = new int[]{11,6,6,3,13,13,14,9};
         SpecialPlayfairCipher instance = new SpecialPlayfairCipher(16);
-        instance.setBogusDomain('A');
+        instance.setBogusDomain(10);
         instance.setKey(key);
-        int[] expResult = new int[]{'A','7','7','2','D','D','D'};
+        int[] expResult = new int[]{10,7,7,2,13,13,13,10};
         int[] result = instance.decrypt(cipherText);
         assertArrayEquals(expResult, result);
     }

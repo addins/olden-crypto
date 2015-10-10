@@ -8,21 +8,22 @@ package org.addin.crypto.classic.image;
 import ar.com.hjg.pngj.ImageInfo;
 import ar.com.hjg.pngj.ImageLineHelper;
 import ar.com.hjg.pngj.ImageLineInt;
+import com.github.jtreport.annotation.TestClassReport;
+import com.github.jtreport.annotation.TestSingleReport;
 import org.addin.crypto.classic.core.SimpleKey;
 import org.addin.crypto.classic.core.util.SimpleKeyGen;
-import org.addin.crypto.sample.SamplePngj;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 
 /**
  *
  * @author addin <addins3009@gmail.com>
  */
+@TestClassReport(description = "Test class untuk ImageLineIntSuperEncryption")
 public class ImageLineIntSuperEncryptionTest {
 
     ImageInfo imageInfo;
@@ -38,7 +39,8 @@ public class ImageLineIntSuperEncryptionTest {
     @AfterClass
     public static void tearDownClass() {
     }
-
+    
+    @TestSingleReport(description = "things done before test.")
     @Before
     public void setUp() {
         int cols = 5, rows = 1, bitDepth = 8;
@@ -74,6 +76,7 @@ public class ImageLineIntSuperEncryptionTest {
     /**
      * Test of encrypt method, of class ImageLineIntSuperEncryption.
      */
+    @TestSingleReport(description = "test encrypt an image.")
     @Test
     public void testEncrypt() {
         System.out.println("encrypt");
@@ -92,7 +95,8 @@ public class ImageLineIntSuperEncryptionTest {
     /**
      * Test of decrypt method, of class ImageLineIntSuperEncryption.
      */
-    @Ignore(value = "bug found, last pixel of odd rows is not decrypted, because of it is not a digraph.")
+   //@Ignore(value = "bug found, last pixel of odd rows is not decrypted, because of it is not a digraph.")
+    
     @Test
     public void testDecrypt() {
         System.out.println("decrypt");
@@ -103,7 +107,7 @@ public class ImageLineIntSuperEncryptionTest {
         
         ImageLineInt expResult = createPlainImageLine();
         
-        ImageLineInt result = instance.decrypt(cipherText);
+        ImageLineInt result = instance.decrypt(cipherText);        
         assertArrayEquals(expResult.getScanline(), result.getScanline());
     }
 
@@ -167,7 +171,8 @@ public class ImageLineIntSuperEncryptionTest {
         ImageLineHelper.setPixelRGB8(ili, 1, 205, 65, 4);
         ImageLineHelper.setPixelRGB8(ili, 2, 227, 153, 184);
         ImageLineHelper.setPixelRGB8(ili, 3, 174, 179, 36);
-        ImageLineHelper.setPixelRGB8(ili, 4, 241, 229, 145);
+//        ImageLineHelper.setPixelRGB8(ili, 4, 241, 229, 145);
+        ImageLineHelper.setPixelRGB8(ili, 4, 29, 157, 234);
         
         return ili;
     }
