@@ -105,5 +105,29 @@ public class LetterPlayfairCipherTest {
         
         LetterPlayfairCipher instance = new LetterPlayfairCipher();
         instance.setKey("qwertyuiopacdfghjklzxcvbnm");
-    }  
+    }
+    
+    @Test
+    public void testEnryptHello(){
+        String plainText = "hello";
+        System.out.println("encrypting "+plainText);
+        
+        LetterPlayfairCipher instance = new LetterPlayfairCipher();
+        instance.setKey("lgdbaqmhecurnifxvsokzywtp");
+        String expResult = "ECQZBX";
+        String result = instance.encrypt(plainText);
+        assertEquals(expResult, result);
+    }
+    
+    @Test
+    public void testDeryptHello(){
+        String cipherText = "ECQZBX";
+        System.out.println("decrypting "+cipherText);
+        
+        LetterPlayfairCipher instance = new LetterPlayfairCipher();
+        instance.setKey("lgdbaqmhecurnifxvsokzywtp");
+        String expResult = "HELLO";
+        String result = instance.decrypt(cipherText);
+        assertEquals(expResult, result);
+    }
 }
