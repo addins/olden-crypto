@@ -40,7 +40,6 @@ public class ImageLineIntSuperEncryptionTest {
     public static void tearDownClass() {
     }
     
-    @TestSingleReport(description = "things done before test.")
     @Before
     public void setUp() {
         int cols = 5, rows = 1, bitDepth = 8;
@@ -76,7 +75,8 @@ public class ImageLineIntSuperEncryptionTest {
     /**
      * Test of encrypt method, of class ImageLineIntSuperEncryption.
      */
-    @TestSingleReport(description = "test encrypt an image.")
+    @TestSingleReport(description = "Mengenkripsi pixels yang telah ditentukan",
+            expectations = "pixels terenkripsi sesuai dengan nilai yang telah ditentukan")
     @Test
     public void testEncrypt() {
         System.out.println("encrypt");
@@ -95,8 +95,8 @@ public class ImageLineIntSuperEncryptionTest {
     /**
      * Test of decrypt method, of class ImageLineIntSuperEncryption.
      */
-   //@Ignore(value = "bug found, last pixel of odd rows is not decrypted, because of it is not a digraph.")
-    
+    @TestSingleReport(description = "Mendekripsi pixels yang telah ditentukan",
+            expectations = "nilai pixels kembali sesuai dengan nilai yang telah ditentukan")
     @Test
     public void testDecrypt() {
         System.out.println("decrypt");
@@ -171,7 +171,6 @@ public class ImageLineIntSuperEncryptionTest {
         ImageLineHelper.setPixelRGB8(ili, 1, 205, 65, 4);
         ImageLineHelper.setPixelRGB8(ili, 2, 227, 153, 184);
         ImageLineHelper.setPixelRGB8(ili, 3, 174, 179, 36);
-//        ImageLineHelper.setPixelRGB8(ili, 4, 241, 229, 145);
         ImageLineHelper.setPixelRGB8(ili, 4, 29, 157, 234);
         
         return ili;
