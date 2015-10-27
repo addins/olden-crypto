@@ -60,10 +60,12 @@ public class SamplePngj {
     }
 
     public static void testEncryptImage() {
-        String fileName = "bug1.png";
-        String encrFileName = "bug1_en.png";
+//        String fileName = "bug1.png";
+        String fileName = "org.png";
+//        String encrFileName = "bug1_en.png";
+        String encrFileName = "org_ven.png";
         
-        STATIC_KEY = new SimpleKey<>(buggyKey());
+        STATIC_KEY = new SimpleKey<>(sampleKey());
         
         PngImageSuperEncryption pise = new PngImageSuperEncryption(fileName, encrFileName);
         pise.setKey(STATIC_KEY);
@@ -72,8 +74,10 @@ public class SamplePngj {
     }
 
     public static void testDecryptImage() {
-        String fileName = "bug1_en.png";
-        String encrFileName = "bug1_de.png";
+//        String fileName = "bug1_en.png";
+        String fileName = "org_ven.png";
+//        String encrFileName = "bug1_de.png";
+        String encrFileName = "org_vde.png";
 
         PngImageSuperEncryption pise = new PngImageSuperEncryption(fileName, encrFileName);
         pise.setKey(STATIC_KEY);
@@ -262,6 +266,27 @@ public class SamplePngj {
             {116, 21, 15, 217, 211, 64, 125, 184, 240, 236, 162, 68, 138, 222, 67, 69},
             {176, 206, 170, 167, 179, 79, 145, 219, 85, 250, 13, 4, 94, 208, 234, 135},
             {249, 6, 88, 54, 38, 218, 143, 117, 255, 87, 90, 225, 212, 163, 96, 120},
+            {57, 115, 157, 20, 155, 41, 114, 108, 75, 82, 40, 192, 58, 223, 127, 111},
+            {188, 231, 136, 131, 147, 166, 104, 213, 199, 47, 139, 221, 110, 118, 99, 196},
+            {22, 10, 229, 5, 42, 220, 152, 76, 49, 173, 133, 78, 186, 242, 132, 187},
+            {2, 32, 48, 149, 9, 103, 164, 148, 124, 134, 185, 77, 107, 202, 8, 140},
+            {142, 26, 23, 244, 160, 156, 72, 194, 81, 174, 239, 252, 95, 232, 119, 97},
+            {146, 24, 14, 228, 109, 1, 37, 105, 165, 34, 102, 253, 113, 80, 161, 71},
+            {91, 112, 51, 180, 66, 245, 210, 209, 73, 215, 17, 189, 241, 126, 233, 89},
+            {60, 18, 198, 27, 243, 44, 197, 106, 183, 195, 204, 137, 141, 93, 11, 56}
+        };
+    }
+    
+    public static int[][] sampleKey(){
+        return new int[][]{
+            {3, 121, 230, 46, 203, 55, 128, 154, 30, 65, 190, 92, 150, 83, 43, 172},
+            {59, 191, 19, 151, 36, 254, 53, 100, 62, 84, 144, 237, 246, 251, 178, 39},
+            {201, 74, 101, 98, 33, 216, 175, 247, 205, 25, 63, 214, 168, 28, 235, 177},
+            {224, 130, 171, 226, 45, 86, 182, 159, 35, 61, 123, 227, 169, 153, 50, 16},
+            {12, 52, 129, 200, 238, 181, 158, 122, 70, 29, 193, 207, 31, 7, 6, 248},
+            {116, 21, 15, 217, 211, 64, 125, 184, 240, 236, 162, 68, 138, 222, 67, 69},
+            {176, 206, 170, 167, 179, 79, 145, 219, 85, 250, 13, 4, 94, 208, 234, 135},
+            {249, 0, 88, 54, 38, 218, 143, 117, 255, 87, 90, 225, 212, 163, 96, 120},
             {57, 115, 157, 20, 155, 41, 114, 108, 75, 82, 40, 192, 58, 223, 127, 111},
             {188, 231, 136, 131, 147, 166, 104, 213, 199, 47, 139, 221, 110, 118, 99, 196},
             {22, 10, 229, 5, 42, 220, 152, 76, 49, 173, 133, 78, 186, 242, 132, 187},
