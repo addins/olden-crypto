@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.addin.crypto.classic.core.util;
 
 import java.lang.reflect.Array;
@@ -46,7 +41,6 @@ public class SpiralSquareTextKeyGen extends TextKeyGen{
         while (top <= bottom && left <= right) {            
             if(direction == 0){
                 for (int i = left; i <= right; i++) {
-//                    System.out.println(input[top][i]);
                     res[x][y] = input[top][i];
                     y++;
                     if(y==mXn){
@@ -59,7 +53,6 @@ public class SpiralSquareTextKeyGen extends TextKeyGen{
                 top++;
             }else if(direction == 1){
                 for (int i = top; i <= bottom; i++) {
-//                    System.out.println(input[i][right]);
                     res[x][y] = input[i][right];
                     y++;
                     if(y==mXn){
@@ -72,7 +65,6 @@ public class SpiralSquareTextKeyGen extends TextKeyGen{
                 right--;
             }else if(direction == 2){
                 for (int i = right; i >= left; i--) {
-//                    System.out.println(input[bottom][i]);
                     res[x][y] = input[bottom][i];
                     y++;
                     if(y==mXn){
@@ -85,7 +77,6 @@ public class SpiralSquareTextKeyGen extends TextKeyGen{
                 bottom--;
             }else if(direction == 3){
                 for (int i = bottom; i >= top; i--) {
-//                    System.out.println(input[i][left]);
                     res[x][y] = input[i][left];
                     y++;
                     if(y==mXn){
