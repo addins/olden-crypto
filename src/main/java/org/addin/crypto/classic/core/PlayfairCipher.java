@@ -220,9 +220,8 @@ public class PlayfairCipher implements Encipherment<int[]> {
                 }
             }
         }*/
-        if(valToPosKey.containsKey(element))
+        
         return valToPosKey.get(element).getPosition();
-        return null;
     }
 
     protected final int getElementInKey(int x, int y) {
