@@ -1,11 +1,11 @@
 package org.addin.crypto.classic.core;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import org.addin.crypto.classic.core.exception.InappropriateKeyException;
 import org.addin.crypto.classic.core.exception.InvalidBogusDomainException;
-import org.apache.commons.collections4.SortedBidiMap;
-import org.apache.commons.collections4.bidimap.DualTreeBidiMap;
 
 /**
  *
@@ -18,10 +18,11 @@ public class PlayfairCipher implements Encipherment<int[]> {
 
     protected final int elementDomain;
     
-    private SortedBidiMap<Integer, KeyPosition> valToPosKey;
+    private Map<Integer,int[]> valToPosList;
 
     public PlayfairCipher(int elementDomain) {
         this.elementDomain = elementDomain;
+        valToPosList = new HashMap<>(elementDomain);
     }
 
     @Override
@@ -113,13 +114,10 @@ public class PlayfairCipher implements Encipherment<int[]> {
         }
         if (hasNoDuplicateElement(keyA) && isSquareMatrix(keyA, this.elementDomain)) {
             this.key = keyA;
-            if(valToPosKey == null){
-                valToPosKey = new DualTreeBidiMap<>();
-            }
             
             for (int i = 0; i < this.key.length;i++) {
                 for (int j=0; j< this.key[i].length; j++) {
-                    valToPosKey.put(this.key[i][j], new KeyPosition(i, j));
+                    valToPosList.put(this.key[i][j], new int[]{i,j});
                 }
             }
             
@@ -213,15 +211,8 @@ public class PlayfairCipher implements Encipherment<int[]> {
 
     protected final int[] findPositionInKey(int element) {
         isKeySet();
-        /*for (int i = 0; i < key.length; i++) {
-            for (int j = 0; j < key[i].length; j++) {
-                if (key[i][j] == element) {
-                    return new int[]{i, j};
-                }
-            }
-        }*/
-        
-        return valToPosKey.get(element).getPosition();
+                
+        return valToPosList.get(element);
     }
 
     protected final int getElementInKey(int x, int y) {
@@ -321,24 +312,5 @@ public class PlayfairCipher implements Encipherment<int[]> {
         output[0] = getElementInKey(x1, y2);
         output[1] = getElementInKey(x2, y1);
         return output;
-    }
-    
-    private static class KeyPosition implements Comparable<KeyPosition>{
-        int[] val;
-
-        public KeyPosition(int i, int j) {
-            this.val = new int[]{i,j};
-        }
-        
-        public int[] getPosition(){
-            return this.val;
-        }
-
-        @Override
-        public int compareTo(KeyPosition o) {
-            if(o.val[0] >= val[0] || (o.val[0] == val[0] && o.val[1] >= val[1])) return -1;
-            if(o.val[0] <= val[0] || (o.val[0] == val[0] && o.val[1] <= val[1])) return 1;
-            return 0;
-        }
     }
 }
