@@ -1,4 +1,5 @@
 # README #
+[![Build Status](https://travis-ci.org/addins/olden-crypto.svg?branch=master)](https://travis-ci.org/addins/olden-crypto)
 
 This README would normally document whatever steps are necessary to get your application up and running.
 
